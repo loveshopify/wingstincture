@@ -1,0 +1,232 @@
+{% paginate collection.products by section.settings.pagination_limit %}
+  {% assign tag_count = collection.all_tags | size %}
+  {% assign tag_threshold = section.settings.tag_threshold | minus: 0 %}
+
+  <div class="sixteen columns clearfix collection_nav">
+    <h1 class="collection_title {% if section.settings.collection_tags and tag_count <= tag_threshold %}collection_title_tags{% endif %}"><a href="{% if collection.handle == "all" %}/collections/all{% else %}{{ collection.url }}{% endif %}" title="{{ collection.title | escape }}">{{ collection.title }}</a></h1>
+    {% if collection.handle != blank and collection.products_count > 0 %}
+      {% if section.settings.collection_tags %}
+        <div class="section_select tag_filter" {% if tag_count > tag_threshold %}style="display:block"{% endif %}>
+          <select name="tag_filter" id="tag_filter">
+            <option {% unless current_tags %}selected="selected"{% endunless %} value="{% if collection.handle == "all" %}/collections/all{% elsif collection.handle %}{{ collection.url }}{% elsif collection.all_products_count > 0 and collection.products.first.type == collection.title %}{{ collection.title | url_for_type }}{% elsif collection.all_products_count > 0 and collection.products.first.vendor == collection.title %}{{ collection.title | url_for_vendor }}{% endif %}">{{ 'collections.general.view_all' | t }}</option>
+            {% for tag in collection.all_tags %}
+              {% unless tag contains 'meta-' %}
+                <option {% if current_tags contains tag %}selected="selected"{% endif %} value="/collections/{% if collection.handle != blank %}{{ collection.handle }}{% else %}all{% endif %}/{{ tag | handleize }}">{{ tag }}</option>
+              {% endunless %}
+            {% endfor %}
+          </select>
+        </div>
+      {% endif %}
+
+      {% if section.settings.collection_sort %}
+        <div class="section_select">
+          <select id="sort-by" data-default-sort="{{ collection.sort_by | default: collection.default_sort_by }}">
+            <option value="manual">{{ 'collections.sorting.featured' | t }}</option>
+            <option value="best-selling">{{ 'collections.sorting.best_selling' | t }}</option>
+            <option value="title-ascending">{{ 'collections.sorting.az' | t }}</option>
+            <option value="title-descending">{{ 'collections.sorting.za' | t }}</option>
+            <option value="price-ascending">{{ 'collections.sorting.price_ascending' | t }}</option>
+            <option value="price-descending">{{ 'collections.sorting.price_descending' | t }}</option>
+            <option value="created-descending">{{ 'collections.sorting.date_descending' | t }}</option>
+            <option value="created-ascending">{{ 'collections.sorting.date_ascending' | t }}</option>
+          </select>
+        </div>
+      {% endif %}
+    {% endif %}
+    {% if section.settings.collection_tags %}
+      {% if tag_count <= tag_threshold %}
+        <ul class="collection_menu">
+          <li>
+            <a href="{% if collection.handle == "all" %}/collections/all{% elsif collection.handle %}{{ collection.url }}{% elsif collection.all_products_count > 0 and collection.products.first.type == collection.title %}{{ collection.title | url_for_type }}{% elsif collection.all_products_count > 0 and collection.products.first.vendor == collection.title %}{{ collection.title | url_for_vendor }}{% endif %}">{% if current_tags %}{{ 'collections.general.view_all' | t }}{% else %}<span class="active">{{ 'collections.general.view_all' | t }}</span>{% endif %}</a>
+          </li>
+          {% for tag in collection.all_tags %}
+            {% unless tag contains 'meta-' %}
+              <li>
+                {{ tag | highlight_active_tag | link_to_tag: tag }}
+              </li>
+            {% endunless %}
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endif %}
+  </div>
+
+  {% if collection.description != blank %}
+    <div class="sixteen columns">
+      <div class="section clearfix">
+        {{ collection.description }}
+      </div>
+    </div>
+  {% endif %}
+
+  {% comment %}Check to see if sidebar should be enabled{% endcomment %}
+  {% if section.blocks.size > 0 %}
+    {% assign sidebar = true %}
+  {% else %}
+    {% assign sidebar = false %}
+  {% endif %}
+
+  {% if sidebar %}
+    {% include 'sidebar' %}
+    <div class="twelve columns">
+  {% else %}
+    <div class="sixteen columns">
+  {% endif %}
+
+  {% assign linklist = linklists[collection.handle] %}
+  {% if linklist != empty %}
+    {% assign collections_per_row = section.settings.collections_per_row %}
+    {% include 'collection-loop', sidebar: sidebar %}
+  {% endif %}
+
+  {% if collection.products.size > 0 %}
+    {% assign products = collection.products %}
+    {% assign products_per_row = section.settings.products_per_row %}
+    {% include 'product-loop', sidebar: sidebar %}
+  {% endif %}
+  </div>
+
+  {% include 'pagination', sidebar: sidebar %}
+{% endpaginate %}
+
+{% schema %}
+
+{
+  "name": "Sub-collections",
+  "class": "collection-template-section sub-collections-template-section",
+  "settings": [ 
+    {
+      "type": "checkbox",
+      "id": "collection_sort",
+      "label": "Enable collection sorting"
+    },  
+    {
+      "type": "checkbox",
+      "id": "collection_tags",
+      "label": "Enable filtering by product tag"
+    },
+    {
+      "type": "range",
+      "id": "tag_threshold",
+      "label": "Maximum product tag links",
+      "info": "The threshold value for the maximum number of product tag links to display before changing to a select box.",
+      "min": 1,
+      "max": 20,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "header",
+      "content": "Collections"
+    },
+    {
+      "type": "range",
+      "id": "collections_per_row",
+      "label": "Collections per row",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "header",
+      "content": "Products"
+    },
+    {
+      "type": "range",
+      "id": "products_per_row",
+      "label": "Products per row",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "pagination_limit",
+      "label": "Products per page",
+      "min": 1,
+      "max": 50,
+      "step": 1,
+      "default": 48
+    }, 
+    {
+      "type": "header",
+      "content": "Sidebar"
+    },
+    {
+      "type": "paragraph",
+      "content": "Create sub-collection sidebar by adding content blocks."
+    },
+    {
+      "type": "checkbox",
+      "id": "toggle",
+      "label": "Toggle sidebar content",
+      "default": false
+    }
+  ],
+  "blocks": [
+    {
+      "type": "filter_by_collection",
+      "name": "Collection list",
+      "limit": 1
+    },
+    {
+      "type": "menu",
+      "name": "Menu",
+      "settings": [
+        {
+          "type": "link_list",
+          "id": "custom_menu_linklist",
+          "label": "Menu"
+        }
+      ]
+    },
+    {
+      "type": "page",
+      "name": "Page",
+      "settings": [
+        {
+          "type": "page",
+          "id": "content_page",
+          "label": "Page"
+        }
+      ]
+    },
+    {
+      "type": "filter_by_tag",
+      "name": "Tag list",
+      "limit": 1
+    },
+     {
+      "type": "text",
+      "name": "Text",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading",
+          "default": "Heading"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Text area can be used for special announcements or general information.</p>"
+        }
+      ]
+    },
+    {
+      "type": "filter_by_type",
+      "name": "Type list",
+      "limit": 1
+    },
+    {
+      "type": "filter_by_vendor",
+      "name": "Vendor list",
+      "limit": 1
+    }
+  ]
+}
+
+{% endschema %}

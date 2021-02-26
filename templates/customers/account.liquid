@@ -1,0 +1,70 @@
+{% paginate customer.orders by 20 %}
+  <div class="sixteen columns clearfix collection_nav">
+    <h1 class="collection_title">{{ 'customer.account.details' | t }}</h1>
+  </div>
+   
+  <div class="section clearfix">  
+    <div class="four columns">
+      <div id="customer_detail" class="group">
+        <h4 class="name">{{ customer.name }}</h4>
+<!-- Begin ReCharge code -->
+<p id="rc_link_container">
+    <a href="/tools/recurring/login">Manage Subscriptions</a>
+</p>
+<!-- End ReCharge code -->
+
+        <p class="email note">{{ customer.email }}</p>
+        <div class="address note">
+          {% if customer.default_address != nil %}
+            <p>{{ customer.default_address.address1 }}</p>
+            {% if customer.default_address.address2 != "" %}
+              <p>{{ customer.default_address.address2 }}</p>
+            {% endif %}
+            <p>{{ customer.default_address.city}}, {% if address.province_code %}{{customer.default_address.province_code}}, {% endif %}{{customer.default_address.country}}</p>
+            <p>{{ customer.default_address.zip}}</p>
+            <p>{{ customer.default_address.phone }}</p>
+          {% endif %}
+            <p><a href="/account/addresses">{{ 'customer.account.view_addresses' | t }} ({{ customer.addresses_count }})</a></p>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="twelve columns">
+      <div id="customer_orders">
+        <h4>{{ 'customer.orders.title' | t }}</h4>
+
+        {% if customer.orders.size != 0 %}
+        <table width="100%">
+          <thead>
+            <tr>
+              <th>{{ 'customer.orders.order_number' | t }}</th>
+              <th>{{ 'customer.orders.date' | t }}</th>
+              <th>{{ 'customer.orders.payment_status' | t }}</th>
+              <th>{{ 'customer.orders.fulfillment_status' | t }}</th>
+              <th>{{ 'customer.orders.total' | t }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for order in customer.orders %}
+            <tr class="{% cycle 'odd', 'even' %} {% if order.cancelled %}cancelled_order{% endif %}">
+                <td>{{ order.name | link_to: order.customer_url }}</td>
+                <td>{{ order.created_at | date: format: "month_day_year" }}</td>
+                <td>{{ order.financial_status_label }}</td>
+                <td>{{ order.fulfillment_status_label }}</td>
+                <td>
+                  <span class="money">{{ order.total_price | money }}</span>
+                </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% else %}
+          <p>{{ 'customer.orders.none' | t }}</p>
+        {% endif %}
+
+        {% include 'pagination' with true %}        
+      </div>
+    </div>
+  </div>
+{% endpaginate %}  

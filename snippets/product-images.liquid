@@ -1,0 +1,55 @@
+{% assign featured_image = product.selected_or_first_available_variant.featured_image | default: product.featured_image %}
+<div class="flexslider product_gallery product-{{ product.id }}-gallery {% if product-images == blank %}product_slider{% endif %} {% if settings.product_thumbs == false %}animated fadeInUp{% endif %}">
+  <ul class="slides">
+    {% for image in product.images %}
+      <li data-thumb="{{ image | product_img_url: '300x' }}" data-title="{% if image.alt contains 'youtube' or image.alt contains 'vimeo' %}{{ product.title }}{% else %}{{ image.alt | escape }}{% endif %}">
+        {% if image.alt contains 'youtube' or image.alt contains 'vimeo' %}
+          {% assign src = image.alt | split: 'src="' %}
+          {% assign src = src[1] | split: '"' | first %}
+
+          {% if src contains '?' %}
+            {% assign src = src | append: '&amp;autoplay=1' %}
+          {% else %}
+            {% assign src = src | append: '?autoplay=1' %}
+          {% endif %}
+
+          <div class="video-container {% if image.alt contains 'vimeo' %}vimeo{% else %}youtube{% endif %}">
+            <div>
+              <a href="{{ src }}" class="fancybox fancybox.iframe" data-fancybox-group="{{ product.id }}">
+                {{ image.alt }}
+              </a>
+            </div>
+          </div>
+
+          {% if forloop.length == 1 and settings.thumbnail_position == "no-thumbnails" %}
+            <style>
+              .product-{{ product.id }} .flex-direction-nav {
+                display: none;
+              }
+            </style>
+          {% endif %}
+        {% else %}
+          <a href="{{ image | product_img_url: '2048x' }}" class="fancybox" data-fancybox-group="{{ product.id }}">
+          <div class="image__container" style="max-width: {{ image.width }}px">
+            <img  src="{{ image | product_img_url: '300x' }}"
+                  alt="{{ image.alt | escape }}"
+                  class=" lazyload lazyload--fade-in {% if featured_image.id == image.id %}featured_image{% endif %}"
+                  data-index="{{ forloop.index0 }}"
+                  data-image-id="{{ image.id }}"
+                  data-sizes="auto"
+                  data-src="{{ image | product_img_url: '2048x' }}"
+                  data-srcset=" {{ image | product_img_url: '2048x' }} 2048w,
+                                {{ image | product_img_url: '1600x' }} 1600w,
+                                {{ image | product_img_url: '1200x' }} 1200w,
+                                {{ image | product_img_url: '1000x' }} 1000w,
+                                {{ image | product_img_url: '800x' }} 800w,
+                                {{ image | product_img_url: '600x' }} 600w,
+                                {{ image | product_img_url: '400x' }} 400w"
+                   />
+            </div>
+          </a>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+</div>

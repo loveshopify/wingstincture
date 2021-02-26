@@ -1,0 +1,108 @@
+{% if type == 'block' %}
+  {% assign id = block.id %}
+  {% assign wide_display = block.settings.wide_display %}
+  {% assign aspect_ratio = block.settings.aspect_ratio %}
+  {% assign autoplay = block.settings.autoplay %}
+  {% assign video_dark_overlay = block.settings.video_dark_overlay %}
+  {% assign video = block.settings.video %}
+  {% assign mp4 = block.settings.mp4 %}
+  {% assign ogv = block.settings.ogv %}
+  {% assign image = block.settings.image %}
+  {% assign display_text_over_video = block.settings.display_text_over_video %}
+  {% assign title = block.settings.title %}
+  {% assign subtext = block.settings.subtext %}
+  {% assign text_position = block.settings.text_position %}
+  {% assign text_align = block.settings.text_align %}
+  {% assign button_label = block.settings.button_label %}
+  {% assign link = block.settings.link %}
+{% else %}
+  {% assign id = section.id %}
+  {% assign wide_display = section.settings.wide_display %}
+  {% assign aspect_ratio = section.settings.aspect_ratio %}
+  {% assign autoplay = section.settings.autoplay %}
+  {% assign video_dark_overlay = section.settings.video_dark_overlay %}
+  {% assign video = section.settings.video %}
+  {% assign mp4 = section.settings.mp4 %}
+  {% assign ogv = section.settings.ogv %}
+  {% assign image = section.settings.image %}
+  {% assign display_text_over_video = section.settings.display_text_over_video %}
+  {% assign title = section.settings.title %}
+  {% assign subtext = section.settings.subtext %}
+  {% assign text_position = section.settings.text_position %}
+  {% assign text_align = section.settings.text_align %}
+  {% assign button_label = section.settings.button_label %}
+  {% assign link = section.settings.link %}
+{% endif %}
+<section  class="homepage-video darken-video-{{ video_dark_overlay }}{% if wide_display == false %} container{% endif %}"
+      data-video-id="video-{{id}}"
+      data-autoplay="{{ autoplay }}"
+      data-muted="true"
+      data-autoloop="{{ autoloop }}"
+      
+      data-video-text="{{ display_text_over_video }}"
+      >
+  <div class="homepage-video--media{% if wide_display == false %} sixteen columns{% endif %}"
+    data-video-src="{{ video.id }}"
+    data-aspect-ratio="{{ aspect_ratio }}"
+    data-provider="{% if video.type != blank %}{{ video.type }}{% else %}{% if mp4 != blank %}html5{% else %}empty{% endif %}{% endif %}"
+    data-video-mp4="{{ mp4 }}"
+    data-video-ogv="{{ ogv }}" >
+    {% if image %}
+      <img  data-play-video
+            src="{{ image | img_url: '300x' }}"
+            alt="{{ title | escape }}"
+            class="lazyload lazyload--fade-in homepage-video__image"
+            sizes="100vw"
+            srcset="  {{ image | img_url: '2048x' }} 2048w,
+                      {{ image | img_url: '1600x' }} 1600w,
+                      {{ image | img_url: '1200x' }} 1200w,
+                      {{ image | img_url: '1000x' }} 1000w,
+                      {{ image | img_url: '800x' }} 800w,
+                      {{ image | img_url: '600x' }} 600w,
+                      {{ image | img_url: '400x' }} 400w"
+             />
+    {% else %}
+      <div class="homepage-video__placeholder" data-play-video>
+        {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg placeholder-svg--video' }}
+      </div>
+    {% endif %}
+
+    <div class="flex-caption flexslider homepage_slider caption js-caption">
+      <div class="container">
+        <div class="columns {% if text_position == 'left' %} seven offset-by-one {% elsif text_position == 'right' %} seven offset-by-eight  {% else %} eight offset-by-four {% endif %} align_{{ text_align }} caption-content">
+          {% if title != blank %}
+            <h1 class="headline">
+              {{ title | escape }}
+            </h1>
+          {% endif %}
+          {% if subtext != blank %}
+            <div class="subtitle">
+              {{ subtext }}
+            </div>
+          {% endif %}
+          {% if button_label != blank %}
+            <a {% if link != blank %}href="{{ link }}"{% endif %} class="action_button" data-play-video>
+              {{ button_label | escape }}
+            </a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  {% if autoplay %}
+    .homepage-video__placeholder {
+      visibility: hidden;
+    }
+  {% endif %}
+</style>
+
+<script>
+  setTimeout(function(){
+  $('#video').prop('muted',true);
+  $('#video').prop('playsinline',true);
+  $('#video')[0].play();
+  }, 1000);
+</script>

@@ -1,0 +1,108 @@
+{% assign images_per_row = section.settings.grid-size %}
+
+<div class="gallery-section {% if section.settings.wide_display == false %}container{% endif %}">
+  <div class="section clearfix">
+    {% if section.settings.wide_display == false %}
+      <div class="sixteen columns">
+    {% endif %}
+
+      {% if section.settings.title != blank %}
+        <h2 class="title center">
+          {{ section.settings.title | escape }}
+        </h2>
+        <div class="feature_divider"></div>
+      {% endif %}
+
+      {% if section.blocks.size > 0 %}
+        <div class="gallery-bar">
+          {% for block in section.blocks %}
+            <div class="gallery_image {% if images_per_row == 2 %}two-per-row{% elsif images_per_row == 3 %}three-per-row{% else %}four-per-row{% endif %}" {{ block.shopify_attributes }}>
+              {% if block.settings.image != blank %}
+                <a href="{{ block.settings.image |  img_url: '2000x' }}" rel="gallery" class="lightbox {% if section.settings.wide_display == false %}add-padding{% endif %}">
+                  {{ block.settings.image |  img_url: '800x800', crop: 'center' | img_tag: block.settings.image.alt }}
+                </a>
+              {% else %}
+                <div class="{% if section.settings.wide_display == false %}add-padding{% endif %}">
+                  {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+                </div>
+              {% endif %}
+            </div>
+
+            {% if images_per_row == 2 %}
+                {% cycle '', '<br class="clear" />' %}
+              {% elsif images_per_row == 3 %}
+                {% cycle '', '', '<br class="clear" />' %}
+              {% elsif images_per_row == 4 %}
+                {% cycle '', '', '', '<br class="clear" />' %}
+              {% endif %}
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% if section.settings.wide_display == false %}
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Gallery",
+    "class": "image-gallery-section",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "wide_display",
+        "label": "Wide display"
+      },
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Heading",
+        "default": "Gallery"
+      },
+      {
+        "type": "range",
+        "id": "grid-size",
+        "label": "Images per row",
+        "min": 2,
+        "max": 4,
+        "step": 1,
+        "default": 4
+      }
+    ],
+    "blocks": [
+      {
+        "type": "image",
+        "name": "Image",
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image",
+            "info": "800 x 800px recommended"
+          }
+        ]
+      }
+    ],
+     "presets": [
+      {
+        "name": "Gallery",
+        "category": "Image",
+        "blocks": [
+          {
+            "type": "image"
+          },
+          {
+            "type": "image"
+          },
+          {
+            "type": "image"
+          },
+          {
+            "type": "image"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

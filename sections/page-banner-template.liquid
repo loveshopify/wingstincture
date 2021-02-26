@@ -1,0 +1,48 @@
+<div class="container main">
+  <div class="sixteen columns clearfix collection_nav feature_banner">
+    <h1 class="collection_title">
+      {{ page.title }}
+    </h1>
+  </div>
+</div>
+
+{% if section.settings.image %}
+  <img  alt="{{ section.settings.image.alt }}"
+        src="{{ section.settings.image | img_url: '300x' }}"
+        data-src="{{ section.settings.image | img_url: '2048x' }}"
+        class="lazyload lazyload--fade-in"
+        sizes="100vw"
+        srcset="  {{ section.settings.image | img_url: '2048x' }} 2048w,
+                  {{ section.settings.image | img_url: '1600x' }} 1600w,
+                  {{ section.settings.image | img_url: '1200x' }} 1200w,
+                  {{ section.settings.image | img_url: '1000x' }} 1000w,
+                  {{ section.settings.image | img_url: '800x' }} 800w,
+                  {{ section.settings.image | img_url: '600x' }} 600w,
+                  {{ section.settings.image | img_url: '400x' }} 400w"
+       />
+{% else %}
+  {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg placeholder-svg--banner' }}
+{% endif %}
+
+<div class="container">
+  <div class="sixteen columns">
+    <div class="section clearfix">
+      {{ page.content }}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Banner",
+    "class": "banner-template-section",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "image",
+        "label": "Image",
+        "info": "1600 x 600px recommended"
+      }
+    ]
+  }
+{% endschema %}

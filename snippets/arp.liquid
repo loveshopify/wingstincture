@@ -1,0 +1,8 @@
+<style>
+  #awarp-product-related,
+  #awarp-shopping-cart-related,
+  #awarp-recently-viewed-products{
+    clear:both;
+  }
+</style>
+<div id="exto-arp" class="page-width" data-template="{{ template.name }}" data-product="{{ product.id }}" data-cart-products="{{ cart.items | map: "product_id" | join: "," }}" data-collection="{{ collection.id }}" {% assign arps='all,all-products,best-sellers,best-selling-products,cross-sell-application,frontpage,front-page,featured,featured-products,featured-collection,free-shipping,flash-sale,homepage,home-page,inventory_notifications,in-stock,just-in,low-stock-products,low-stock-products-all-products,new,new-arrivals,new-arrival,new-in,new-products,newest-products,on-sale,orderlyemails-recommended-products,out-of-stock,sale,whats-new'|split:',' %}{% if collection and collection.all_products_count > 1 %}{% unless arps contains collection.handle %}{% assign arpc=collection %}{% endunless %}{% endif %}{% unless arpc %}{% for c in product.collections %}{% unless arps contains c.handle or c.all_products_count < 2 %}{% assign arpc=c %}{% break %}{% endunless %}{% endfor %}{% endunless %} {% if arpc %} data-autopick-collection="{{ arpc.id }}" data-collection-products="{% for product in arpc.products limit:250 %}{{ product.id }},{% endfor %}" {% endif %}></div>

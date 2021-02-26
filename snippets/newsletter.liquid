@@ -1,0 +1,55 @@
+{% if placement == 'footer' %}
+  {% assign display_first_name = section.settings.display_first_name %}
+  {% assign display_last_name = section.settings.display_last_name %}
+{% else %}
+  {% assign display_first_name = settings.display_first_name %}
+  {% assign display_last_name = settings.display_last_name %}
+{% endif %}
+
+{% if display_first_name %}
+  {% if display_last_name == blank %}
+    {% assign displayMode = 'nl--one-name' %}
+  {% endif %}
+{% else %}
+  {% if display_last_name %}
+    {% assign displayMode = 'nl--one-name' %}
+  {% endif %}
+{% endif %}
+
+<div class="newsletter {{ displayMode }}">
+  <p class="message"></p>
+
+  {% form 'customer' %}
+    {% if form.posted_successfully? %}
+      <p><em>{{ 'general.newsletter_form.success_text' | t }}</em></p>
+    {% elsif form.errors %}
+      {% for field in form.errors %}
+        <p><em>{{ field }} - {{ form.errors.messages[field] }}</em></p>
+      {% endfor %}
+    {% endif %}
+
+    {% if template contains "password" %}
+      <input type="hidden" name="contact[tags]" value="prospect,password page"/>
+    {% else %}
+      <input type="hidden" name="contact[tags]" value="newsletter" />
+    {% endif %}
+
+    <div class="input-row">
+      {% if display_first_name %}
+        <input class="newsletter-half first-name" type="text" name="contact[first_name]" placeholder="{{ 'general.newsletter_form.subscriber_first_name' | t }}" />
+      {% endif %}
+      {% if display_last_name %}
+        <input class="newsletter-half last-name" type="text" name="contact[last_name]" placeholder="{{ 'general.newsletter_form.subscriber_last_name' | t }}" />
+      {% endif %}
+
+      {% if display_first_name and display_last_name %}
+      </div>
+      <div class="input-row">
+      {% endif %}
+
+      <input type="hidden" name="challenge" value="false" />
+      <input type="email" class="contact_email" name="contact[email]" required placeholder="{{ 'general.newsletter_form.placeholder' | t }}" autocorrect="off" autocapitalize="off" />
+      <input type='submit' class="action_button sign_up" value="{{ 'general.newsletter_form.submit' | t }}" />
+    </div>
+  {% endform %}
+</div>

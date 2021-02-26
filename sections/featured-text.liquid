@@ -1,0 +1,103 @@
+<div class="container">
+  <div class="sixteen columns">
+    <div class="homepage_content section clearfix">
+      {% if section.settings.image %}
+        {{ section.settings.image | img_url: '1180x', scale: 2 | img_tag: section.settings.image.alt, 'lazyload lazyload--fade-in richtext-logo align_center' }}
+      {% endif %}
+
+      {% if section.settings.title != blank %}
+        <h2 class="title {{ section.settings.text_alignment }}">
+          {{ section.settings.title | escape }}
+        </h2>
+        <div class="feature_divider"></div>
+      {% endif %}
+
+      <div class="{{ section.settings.text_size }} {{ section.settings.text_alignment }}">
+        {% if section.settings.content != blank %}
+          {{ section.settings.content }}
+        {% endif %}
+
+        {% if section.settings.button_label != blank %}
+          <a href="{{ section.settings.button_link }}" class="action_button">
+            {{ section.settings.button_label | escape }}
+          </a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Rich text",
+    "class": "headline-section featured-content-section",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "image",
+        "label": "Logo",
+        "info": "600 x 600px recommended"
+      },
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Heading",
+        "default": "Talk about your brand"
+      },
+      {
+        "type": "richtext",
+        "id": "content",
+        "label": "Text",
+        "default": "<p>Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store.</p>"
+      },
+      {
+        "type": "text",
+        "id": "button_label",
+        "label": "Button label"
+      },
+      {
+        "type": "url",
+        "id": "button_link",
+        "label": "Button link"
+      },
+      {
+        "type": "select",
+        "id": "text_size",
+        "label": "Text size",
+        "options": [
+          {
+            "value": "regular_text",
+            "label": "Regular"
+          },
+          {
+            "value": "featured_text",
+            "label": "Large"
+          }
+        ],
+        "default": "featured_text"
+      },
+      {
+        "type": "select",
+        "id": "text_alignment",
+        "label": "Text alignment",
+        "options": [
+          {
+            "value": "align_left",
+            "label": "Left"
+          },
+          {
+            "value": "center",
+            "label": "Center"
+          }
+        ],
+        "default": "center"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Rich text",
+        "category": "Text"
+      }
+    ]
+  }
+{% endschema %}

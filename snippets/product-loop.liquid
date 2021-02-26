@@ -1,0 +1,32 @@
+{% assign product_found = false %}
+{% assign skip = false %}
+{% assign collection_group = products | map: 'id' %}
+{% assign collection_group_thumb = collection_group | append : 'thumb' %}
+{% assign collection_group_mobile = collection_group | append : 'mobile' %}
+
+{% capture new_row %}
+    <br class="clear product_clear" />
+{% endcapture %}
+
+<div itemtype="http://schema.org/ItemList" class="products">
+  {% for product in products limit: limit %}
+    {% if product.id == skip_product.id or skip == true %}
+      {% assign product_found = true %}
+    {% else %}
+      {% if forloop.rindex0 == 0 and product_found == false and forloop.length != products.count and template != 'search' and template != 'index' %}
+        {% assign skip = true %}
+      {% else %}
+
+        {% include 'product-thumbnail', sidebar: sidebar %}
+
+        {% if products_per_row == 2 %}
+          {% cycle collection_group: '', new_row %}
+        {% elsif products_per_row == 3 %}
+          {% cycle collection_group: '', '', new_row %}
+        {% elsif products_per_row == 4 %}
+          {% cycle collection_group: '', '', '', new_row %}
+        {% endif %}
+      {% endif %}
+    {% endif %}
+  {% endfor %}
+</div>

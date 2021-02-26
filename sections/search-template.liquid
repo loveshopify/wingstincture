@@ -1,0 +1,329 @@
+{% assign search_pagination = section.settings.pagination_limit %}
+{% paginate search.results by search_pagination %}
+
+<div class="sixteen columns clearfix collection_nav">
+  <h1 class="collection_title {% if search.performed %}collection_title_tags{% endif %}">{{ 'general.search.title' | t }}</h1>
+  {% if search.performed %}
+    <ul class="collection_menu">
+      <li>
+        {{ 'general.search.results_count' | t: count: search.results_count }}
+      </li>
+    </ul>
+  {% endif %}
+</div>
+
+{% comment %}Check to see if sidebar should be enabled{% endcomment %}
+{% if section.blocks.size > 0 %}
+  {% assign sidebar = true %}
+{% else %}
+  {% assign sidebar = false %}
+{% endif %}
+
+{% if search.performed %}
+ {% if settings.search_option == 'everything' or search.results.first.price == blank %}
+
+  {% if sidebar %}
+    {% include 'sidebar' %}
+    <div class="twelve columns">
+  {% else %}
+    <div class="sixteen columns">
+  {% endif %}
+
+    {% if search.results == empty %}
+      <br class="clear" />
+      <br class="clear" />
+      <div class="clearfix">
+        <p class="quote">{{ 'general.search.no_results_html' | t: terms: search.terms }}</p>
+      </div>
+
+      <br class="clear" />
+      <br class="clear" />
+    {% else %}
+
+      {% for item in search.results %}
+        <div class="product_row">
+          {% assign featured_image = false %}
+
+          {% if item.object_type == 'article' and item.image %}
+            {% assign featured_image = true %}
+            <div class="four columns alpha">
+               <a href="{{ item.url }}" title="{{ item.title | escape }}">
+                  <img  src="{{ item.image | img_url: '300x' }}"
+                        alt="{{ item.title | escape }}"
+                        data-src="{{ item.image | img_url: '2048x' }}"
+                        class="lazyload lazyload--fade-in"
+                        style="max-width: {{- item.image.width -}}px"
+                        data-sizes="auto"
+                        data-srcset=" {{ item.image | img_url: '2048x' }} 2048w,
+                                      {{ item.image | img_url: '1600x' }} 1600w,
+                                      {{ item.image | img_url: '1200x' }} 1200w,
+                                      {{ item.image | img_url: '1000x' }} 1000w,
+                                      {{ item.image | img_url: '800x' }} 800w,
+                                      {{ item.image | img_url: '600x' }} 600w,
+                                      {{ item.image | img_url: '400x' }} 400w"
+                         />
+               </a>
+            </div>
+          {% elsif item.featured_image %}
+            {% assign featured_image = true %}
+            <div class="four columns alpha">
+               <a href="{{ item.url }}" title="{{ item.title | escape }}">
+                  <img  src="{{ item.featured_image | img_url: '300x' }}"
+                        alt="{{ item.title | escape }}"
+                        data-src="{{ item.featured_image | img_url: '2048x' }}"
+                        class="lazyload lazyload--fade-in"
+                        style="max-width: {{- item.featured_image.width -}}px"
+                        data-sizes="auto"
+                        data-srcset=" {{ item.featured_image | img_url: '2048x' }} 2048w,
+                                      {{ item.featured_image | img_url: '1600x' }} 1600w,
+                                      {{ item.featured_image | img_url: '1200x' }} 1200w,
+                                      {{ item.featured_image | img_url: '1000x' }} 1000w,
+                                      {{ item.featured_image | img_url: '800x' }} 800w,
+                                      {{ item.featured_image | img_url: '600x' }} 600w,
+                                      {{ item.featured_image | img_url: '400x' }} 400w"
+                         />
+               </a>
+            </div>
+          {% endif %}
+
+          {% if sidebar %}
+            <div class="{% if featured_image %}eight{% else %}twelve{% endif %} columns omega align_left">
+          {% else %}
+            <div class="{% if featured_image %}twelve{% else %}sixteen alpha{% endif %} columns omega align_left">
+          {% endif %}
+
+            <h5 class="sub_title">
+              <a href="{{ item.url }}" title="{{ item.title | escape }}">{{ item.title }}</a>
+            </h5>
+
+            {% if item.price %}
+               <div class="info">
+                  <span class="price">
+                    {% if item.compare_at_price_max > item.price %}
+                      <span class="was_price">
+                        <span class="money">{{ item.compare_at_price_max | money }}</span>
+                      </span>
+                    {% endif %}
+
+                    {% if item.available %}
+                      {% if item.price_varies %}
+                        {% if item.compare_at_price_max > item.price %}
+                          <br />
+                        {% endif %}
+                        <small><em>{{ 'products.general.from' | t }}</em></small>
+                      {% endif %}
+                      <span class="money">{{ item.price_min | money }}</span>
+                    {% else %}
+                      <span class="money">{{ item.price_min | money }}</span> - {{ 'products.product.sold_out' | t }}
+                    {% endif %}
+                  </span>
+              </div>
+            {% endif %}
+
+            {% if item.object_type == 'article' %}
+              <p class="blog_meta">
+                {% if section.settings.blog_author %}
+                  <span>{{ 'blogs.article.by_author' | t: author: item.author }}</span>
+                {% endif %}
+
+                {% if section.settings.blog_date %}
+                  <span>{{ item.published_at | date: format: "month_day_year" }}</span>
+                {% endif %}
+              </p>
+            {% endif %}
+
+            {% if item.excerpt %}
+              <div class="excerpt">{{ item.excerpt }}</div>
+
+              {% if section.settings.read_more_link %}
+              <p>
+                <a href="{{ item.url }}" title="{{ item.title | escape }}">{{ 'blogs.general.continue_reading_html' | t }}</a>
+              </p>
+            {% endif %}
+            {% else %}
+              <p>
+                {{ item.content | strip_html | truncatewords: 40 | highlight: search.terms | replace: 'Description', '' | replace: 'Specs', '' | replace: 'Shipping', '' | replace: 'Size', '' }}
+              </p>
+            {% endif %}
+          </div>
+        </div>
+      <hr />
+      {% endfor %}
+    {% endif %}
+  </div>
+
+ {% else %}
+      {% if sidebar %}
+        {% include 'sidebar' %}
+        <div class="twelve columns">
+      {% else %}
+        <div class="sixteen columns">
+      {% endif %}
+
+      {% assign products = search.results %}
+      {% assign products_per_row = section.settings.products_per_row %}
+      {% include 'product-loop', sidebar: sidebar %}
+
+      </div>
+  {% endif %}
+
+  {% include 'pagination' %}
+
+{% else %}
+  <div class="clearfix search_page">
+
+    {% if sidebar %}
+      {% include 'sidebar' %}
+      <div class="twelve columns">
+    {% else %}
+      <div class="sixteen columns">
+    {% endif %}
+
+    <br class="clear" />
+    <br class="clear" />
+    <div class="{% if sidebar %}twelve{% else %}ten offset-by-three{% endif %} columns center">
+      <p class="quote">
+        {{ 'general.search.description' | t }}
+      </p>
+    </div>
+      <form class="search" action="/search">
+        <div class="five {% if sidebar %}offset-by-two{% else %}offset-by-four{% endif %} columns center">
+          {% if settings.search_option != 'everything' %}
+            <input type="hidden" name="type" value="product" />
+          {% endif %}
+          <input type="text" name="q" placeholder="{{ 'general.search.placeholder' | t }}" value="{{ search.terms }}" x-webkit-speech autocapitalize="off" autocomplete="off" autocorrect="off" />
+        </div>
+        <div class="four columns">
+          <input type="submit" name="submit" class="action_button" value="{{ 'general.search.submit' | t }}" style="margin-top:0" />
+        </div>
+      </form>
+    </div>
+  </div>
+{% endif %}
+{% endpaginate %}
+
+{% schema %}
+
+{
+  "name": "Search",
+  "class": "search-template-section",
+  "settings": [
+    {
+      "type": "range",
+      "id": "products_per_row",
+      "label": "Products per row",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "pagination_limit",
+      "label": "Products per page",
+      "min": 1,
+      "max": 50,
+      "step": 1,
+      "default": 48
+    },
+    {
+      "type": "header",
+      "content": "Blog results"
+    },
+    {
+      "type": "checkbox",
+      "id": "blog_author",
+      "label": "Show author"
+    },
+    {
+      "type": "checkbox",
+      "id": "blog_date",
+      "label": "Show date",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "read_more_link",
+      "label": "Show continue reading link",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Sidebar"
+    },
+    {
+      "type": "paragraph",
+      "content": "Create a sidebar by adding content blocks."
+    },
+    {
+      "type": "checkbox",
+      "id": "toggle",
+      "label": "Toggle sidebar content",
+      "default": false
+    }
+  ],
+  "blocks": [
+   {
+      "type": "text",
+      "name": "Text",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading",
+          "default": "Heading"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Text area can be used for details about blog authors or general information.</p>"
+        }
+      ]
+    },
+    {
+      "type": "page",
+      "name": "Page",
+      "settings": [
+        {
+          "type": "page",
+          "id": "content_page",
+          "label": "Page"
+        }
+      ]
+    },
+    {
+      "type": "menu",
+      "name": "Menu",
+      "settings": [
+        {
+          "type": "link_list",
+          "id": "custom_menu_linklist",
+          "label": "Menu"
+        }
+      ]
+    },
+    {
+      "type": "filter_by_tag",
+      "name": "Tag list",
+      "limit": 1
+    },
+    {
+      "type": "filter_by_type",
+      "name": "Type list",
+      "limit": 1
+    },
+    {
+      "type": "filter_by_vendor",
+      "name": "Vendor list",
+      "limit": 1
+    },
+    {
+      "type": "filter_by_collection",
+      "name": "Collection list",
+      "limit": 1
+    }
+  ]
+}
+
+{% endschema %}

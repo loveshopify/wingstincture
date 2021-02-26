@@ -1,0 +1,1412 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Mobilia",
+    "theme_author": "Out of the Sandbox",
+    "theme_version": "5.5.8",
+    "theme_documentation_url": "https:\/\/help.outofthesandbox.com\/",
+    "theme_support_url": "https:\/\/help.outofthesandbox.com\/hc\/en-us\/requests\/new"
+  },
+  {
+    "name": "Colors",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Header"
+      },
+      {
+        "type": "color",
+        "id": "logo_color",
+        "label": "Logo text",
+        "default": "#303030"
+      },
+      {
+        "type": "color",
+        "id": "header_bg_color",
+        "label": "Background",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "top_menu_color",
+        "label": "Top menu",
+        "default": "#b3b3b3"
+      },
+      {
+        "type": "color",
+        "id": "nav_color",
+        "label": "Main menu",
+        "default": "#7b858f"
+      },
+      {
+        "type": "color",
+        "id": "nav_color_hover",
+        "label": "Main menu hover",
+        "default": "#00afd8"
+      },
+      {
+        "type": "color",
+        "id": "nav_color_active",
+        "label": "Main menu active",
+        "default": "#3d4247"
+      },
+      {
+        "type": "color",
+        "id": "dropdown_background_color",
+        "label": "Drop-down menu background",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "dropdown_border_color",
+        "label": "Drop-down menu outline",
+        "default": "#ffffff"
+      },
+      {
+        "type": "header",
+        "content": "General"
+      },
+      {
+        "type": "color",
+        "id": "headline_color",
+        "label": "Headings",
+        "default": "#303030"
+      },
+      {
+        "type": "color",
+        "id": "headline_border_color",
+        "label": "Heading divider line",
+        "default": "#363636"
+      },
+      {
+        "type": "color",
+        "id": "regular_color",
+        "label": "Body text",
+        "default": "#303030"
+      },
+      {
+        "type": "color",
+        "id": "link_color",
+        "label": "Links",
+        "default": "#333333"
+      },
+      {
+        "type": "color",
+        "id": "link_hover_color",
+        "label": "Link hover",
+        "default": "#000000"
+      },
+      {
+        "type": "header",
+        "content": "Background"
+      },
+      {
+        "type": "color",
+        "id": "shop_bg_color",
+        "label": "Background",
+        "default": "#ffffff"
+      },
+      {
+        "type": "image_picker",
+        "id": "custom_bg",
+        "label": "Image",
+        "info": "1800 x 1000px recommended"
+      },
+      {
+        "type": "select",
+        "id": "repeat_bg",
+        "label": "Repeat background",
+        "options": [
+          {
+            "value": "no-repeat",
+            "label": "None"
+          },
+          {
+            "value": "repeat-x",
+            "label": "Horizontally"
+          },
+          {
+            "value": "repeat-y",
+            "label": "Vertically"
+          },
+          {
+            "value": "repeat",
+            "label": "Both"
+          }
+        ],
+        "default": "repeat"
+      },
+      {
+        "type": "checkbox",
+        "id": "bg_fixed",
+        "label": "Use fixed background"
+      },
+      {
+        "type": "checkbox",
+        "id": "bg_stretched",
+        "label": "Stretch background"
+      },
+      {
+        "type": "header",
+        "content": "Borders"
+      },
+      {
+        "type": "color",
+        "id": "border_color",
+        "label": "Borders",
+        "default": "#d3d3d3"
+      },
+      {
+        "type": "checkbox",
+        "id": "table_styles_enabled",
+        "label": "Enable styled tables",
+        "info": "This will add borders and padding to your tables"
+      },
+      {
+        "type": "header",
+        "content": "Buttons"
+      },
+      {
+        "type": "color",
+        "id": "btn_color",
+        "label": "Background",
+        "default": "#000000"
+      },
+      {
+        "type": "color",
+        "id": "btn_hover_color",
+        "label": "Background hover",
+        "default": "#AE3333"
+      },
+      {
+        "type": "color",
+        "id": "btn_text_color",
+        "label": "Text",
+        "default": "#FFFFFF"
+      },
+      {
+        "type": "select",
+        "id": "button_style",
+        "label": "Button style",
+        "options": [
+          {
+            "value": "square",
+            "label": "Square"
+          },
+          {
+            "value": "round",
+            "label": "Round"
+          }
+        ],
+        "default": "round"
+      },
+      {
+        "type": "header",
+        "content": "Badges"
+      },
+      {
+        "type": "color",
+        "id": "sale_color",
+        "label": "Sale price",
+        "default": "#AE3333"
+      },
+      {
+        "type": "color",
+        "id": "was_price_color",
+        "label": "Compare at price",
+        "default": "#AE3333"
+      },
+      {
+        "type": "color",
+        "id": "sale_banner_color",
+        "label": "Sale banner",
+        "default": "#AE3333"
+      },
+      {
+        "type": "color",
+        "id": "new_banner_color",
+        "label": "Coming soon, new, pre-order banner",
+        "default": "#AE3333"
+      },
+      {
+        "type": "header",
+        "content": "Quick shop"
+      },
+      {
+        "type": "color",
+        "id": "modal_background_color",
+        "label": "Background",
+        "default": "#FFFFFF"
+      },
+      {
+        "type": "color",
+        "id": "quick_shop_button_color",
+        "label": "Button",
+        "default": "#303030"
+      },
+      {
+        "type": "color",
+        "id": "quick_shop_button_hover_color",
+        "label": "Button hover",
+        "default": "#ffa02f"
+      },
+      {
+        "type": "color",
+        "id": "quick_shop_text_color",
+        "label": "Button label",
+        "default": "#ffffff"
+      },
+      {
+        "type": "header",
+        "content": "Social media"
+      },
+      {
+        "type": "color",
+        "id": "social_icons_color",
+        "label": "Icons",
+        "default": "#AE3333"
+      },
+      {
+        "type": "color",
+        "id": "social_icons_color_hover",
+        "label": "Icon hover",
+        "default": "#AE3333"
+      },
+      {
+        "type": "header",
+        "content": "Footer"
+      },
+      {
+        "type": "color",
+        "id": "headline_footer_text_color",
+        "label": "Headings",
+        "default": "#303030"
+      },
+      {
+        "type": "color",
+        "id": "footer_text_color",
+        "label": "Body text",
+        "default": "#AE3333"
+      },
+      {
+        "type": "color",
+        "id": "footer_link_color",
+        "label": "Links",
+        "default": "#00afd8"
+      },
+      {
+        "type": "color",
+        "id": "footer_link_color_hover",
+        "label": "Link hover",
+        "default": "#3d4247"
+      },
+      {
+        "type": "color",
+        "id": "footer_border_color",
+        "label": "Border",
+        "default": "#dbe3e5"
+      },
+      {
+        "type": "color",
+        "id": "footer_color",
+        "label": "Background",
+        "default": "#ecf2f3"
+      },
+      {
+        "type": "image_picker",
+        "id": "custom_footer",
+        "label": "Image",
+        "info": "1800 x 600px recommended"
+      },
+      {
+        "type": "header",
+        "content": "Blog"
+      },
+      {
+        "type": "select",
+        "id": "read_more_style",
+        "label": "Continue reading link style",
+        "options": [
+          {
+            "value": "button",
+            "label": "Button"
+          },
+          {
+            "value": "link",
+            "label": "Link"
+          }
+        ],
+        "default": "button"
+      },
+      {
+        "type": "header",
+        "content": "Content"
+      },
+      {
+        "type": "color",
+        "id": "shop_home_page_featured_text_bg_color",
+        "label": "Rich text",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "shop_home_page_image_bg_color",
+        "label": "Image with text",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "shop_home_page_bg_color",
+        "label": "Pages",
+        "default": "#ecf2f3"
+      },
+      {
+        "type": "header",
+        "content": "Slideshow and images"
+      },
+      {
+        "type": "color",
+        "id": "banner_color",
+        "label": "Headings",
+        "default": "#ffffff"
+      },
+      {
+        "type": "header",
+        "content": "Testimonial section"
+      },
+      {
+        "type": "color",
+        "id": "testimonial_bg_color",
+        "label": "Background",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "testimonial_text_color",
+        "label": "Regular text",
+        "default": "#404040"
+      },
+      {
+        "type": "header",
+        "content": "Newsletter popup"
+      },
+      {
+        "type": "color",
+        "id": "newsletter_popup_color",
+        "label": "Text",
+        "default": "#404040"
+      },
+      {
+        "type": "color",
+        "id": "newsletter_popup_background_color",
+        "label": "Background",
+        "default": "#ffffff"
+      },
+      {
+        "type": "image_picker",
+        "id": "newsletter_bg",
+        "label": "Background image",
+        "info": "600 x 400px recommended"
+      },
+      {
+        "type": "checkbox",
+        "id": "newsletter_bg_stretched",
+        "label": "Stretch background to fill popup"
+      },
+      {
+        "type": "header",
+        "content": "Password page"
+      },
+      {
+        "type": "color",
+        "id": "password_page_text_color",
+        "label": "Text",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "password_page_heading_color",
+        "label": "Headings",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "password_page_background_color",
+        "label": "Background",
+        "default": "#000000"
+      }
+    ]
+  },
+  {
+    "name": "Typography",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Logo "
+      },
+      {
+        "type": "font_picker",
+        "id": "logo__font",
+        "label": "Font",
+        "default": "open_sans_n4"
+      },
+      {
+        "type": "select",
+        "id": "logo_font_style",
+        "label": "Capitalization",
+        "options": [
+          {
+            "value": "none",
+            "label": "None"
+          },
+          {
+            "value": "uppercase",
+            "label": "Uppercase"
+          },
+          {
+            "value": "lowercase",
+            "label": "Lowercase"
+          }
+        ],
+        "default": "none"
+      },
+      {
+        "type": "range",
+        "id": "logo_font_size",
+        "label": "Base size",
+        "min": 12,
+        "max": 42,
+        "default": 34,
+        "unit": "px"
+      },
+      {
+        "type": "header",
+        "content": "Headings"
+      },
+      {
+        "type": "font_picker",
+        "id": "headline__font",
+        "label": "Font",
+        "default": "open_sans_n4"
+      },
+      {
+        "type": "select",
+        "id": "headline_font_style",
+        "label": "Capitalization",
+        "options": [
+          {
+            "value": "none",
+            "label": "None"
+          },
+          {
+            "value": "uppercase",
+            "label": "Uppercase"
+          },
+          {
+            "value": "lowercase",
+            "label": "Lowercase"
+          }
+        ],
+        "default": "none"
+      },
+      {
+        "type": "range",
+        "id": "headline_font_size",
+        "label": "Base size",
+        "min": 20,
+        "max": 60,
+        "default": 26,
+        "unit": "px"
+      },
+      {
+        "type": "range",
+        "id": "headline_letter_spacing",
+        "label": "Letter spacing",
+        "min": 0,
+        "max": 6,
+        "default": 1,
+        "unit": "px"
+      },
+      {
+        "type": "select",
+        "id": "headline_border",
+        "label": "Heading divider line",
+        "options": [
+          {
+            "value": "none",
+            "label": "None"
+          },
+          {
+            "value": "thin_short",
+            "label": "Short thin"
+          },
+          {
+            "value": "wide_short",
+            "label": "Short bold"
+          },
+          {
+            "value": "thin_long",
+            "label": "Long thin"
+          },
+          {
+            "value": "wide_long",
+            "label": "Long bold"
+          }
+        ],
+        "default": "none"
+      },
+      {
+        "type": "header",
+        "content": "Main menu and buttons"
+      },
+      {
+        "type": "font_picker",
+        "id": "nav__font",
+        "label": "Font",
+        "default": "open_sans_n4"
+      },
+      {
+        "type": "select",
+        "id": "nav_font_style",
+        "label": "Main menu capitalization",
+        "options": [
+          {
+            "value": "none",
+            "label": "None"
+          },
+          {
+            "value": "uppercase",
+            "label": "Uppercase"
+          },
+          {
+            "value": "lowercase",
+            "label": "Lowercase"
+          }
+        ],
+        "default": "none"
+      },
+      {
+        "type": "range",
+        "id": "nav_font_size",
+        "label": "Main menu base size",
+        "min": 12,
+        "max": 20,
+        "default": 14,
+        "unit": "px"
+      },
+      {
+        "type": "range",
+        "id": "nav_letter_spacing",
+        "label": "Main menu letter spacing",
+        "min": 0,
+        "max": 6,
+        "default": 0,
+        "unit": "px"
+      },
+      {
+        "type": "range",
+        "id": "top_menu_size",
+        "label": "Top menu font size",
+        "min": 12,
+        "max": 20,
+        "default": 12,
+        "unit": "px"
+      },
+      {
+        "type": "select",
+        "id": "button_font_style",
+        "label": "Button label capitalization",
+        "options": [
+          {
+            "value": "none",
+            "label": "None"
+          },
+          {
+            "value": "uppercase",
+            "label": "Uppercase"
+          },
+          {
+            "value": "lowercase",
+            "label": "Lowercase"
+          }
+        ],
+        "default": "uppercase"
+      },
+      {
+        "type": "range",
+        "id": "button_font_size",
+        "label": "Button label size",
+        "min": 12,
+        "max": 20,
+        "default": 14,
+        "unit": "px"
+      },
+      {
+        "type": "range",
+        "id": "button_letter_spacing",
+        "label": "Button letter spacing",
+        "min": 0,
+        "max": 6,
+        "default": 0,
+        "unit": "px"
+      },
+      {
+        "type": "header",
+        "content": "Body text"
+      },
+      {
+        "type": "font_picker",
+        "id": "regular__font",
+        "label": "Font",
+        "default": "open_sans_n4"
+      },
+      {
+        "type": "select",
+        "id": "regular_font_style",
+        "label": "Capitalization",
+        "options": [
+          {
+            "value": "none",
+            "label": "None"
+          },
+          {
+            "value": "uppercase",
+            "label": "Uppercase"
+          },
+          {
+            "value": "lowercase",
+            "label": "Lowercase"
+          }
+        ],
+        "default": "none"
+      },
+      {
+        "type": "range",
+        "id": "regular_font_size",
+        "label": "Base size",
+        "min": 12,
+        "max": 20,
+        "default": 14,
+        "unit": "px"
+      },
+      {
+        "type": "range",
+        "id": "footer_font_size",
+        "label": "Footer font size",
+        "min": 12,
+        "max": 20,
+        "default": 14,
+        "unit": "px"
+      },
+      {
+        "type": "header",
+        "content": "Banner headings"
+      },
+      {
+        "type": "font_picker",
+        "id": "slideshow_headline__font",
+        "label": "Font",
+        "default": "open_sans_n4"
+      },
+      {
+        "type": "range",
+        "id": "slideshow_headline_size",
+        "label": "Base size",
+        "min": 20,
+        "max": 60,
+        "default": 42,
+        "unit": "px"
+      },
+      {
+        "type": "header",
+        "content": "Banner subheadings"
+      },
+      {
+        "type": "font_picker",
+        "id": "slideshow_subtitle__font",
+        "label": "Font",
+        "default": "open_sans_n4"
+      },
+      {
+        "type": "select",
+        "id": "slideshow_subtitle_font_style",
+        "label": "Capitalization",
+        "options": [
+          {
+            "value": "none",
+            "label": "None"
+          },
+          {
+            "value": "uppercase",
+            "label": "Uppercase"
+          },
+          {
+            "value": "lowercase",
+            "label": "Lowercase"
+          }
+        ],
+        "default": "none"
+      },
+      {
+        "type": "range",
+        "id": "slideshow_subtitle_size",
+        "label": "Base size",
+        "min": 16,
+        "max": 60,
+        "default": 20,
+        "unit": "px"
+      }
+    ]
+  },
+  {
+    "name": "Product grid",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Collections and search results"
+      },
+      {
+        "type": "checkbox",
+        "id": "align_height",
+        "label": "Align height of product images"
+      },
+      {
+        "type": "range",
+        "id": "collection_height",
+        "label": "Product image height",
+        "min": 150,
+        "max": 400,
+        "step": 10,
+        "default": 200,
+        "unit": "px"
+      },
+      {
+        "type": "checkbox",
+        "id": "collection_secondary_image",
+        "label": "Show secondary product image"
+      },
+      {
+        "type": "checkbox",
+        "id": "display_vendor_collection",
+        "label": "Show vendor"
+      },
+      {
+        "type": "checkbox",
+        "id": "sale_banner_enabled",
+        "label": "Show sale banners"
+      },
+      {
+        "type": "checkbox",
+        "id": "collection_swatches",
+        "label": "Show color swatches ([?](https:\/\/help.outofthesandbox.com\/hc\/en-us\/articles\/115006911447-Enabling-Color-Swatches-for-Products))"
+      },
+      {
+        "type": "select",
+        "id": "product_price_alignment",
+        "label": "Product price alignment",
+        "options": [
+          {
+            "value": "left",
+            "label": "Left"
+          },
+          {
+            "value": "center",
+            "label": "Center"
+          },
+          {
+            "value": "right",
+            "label": "Right"
+          }
+        ],
+        "default": "right"
+      },
+      {
+        "type": "select",
+        "id": "mobile_products_per_row",
+        "label": "Products per row on mobile",
+        "options": [
+          {
+            "value": "1",
+            "label": "1"
+          },
+          {
+            "value": "2",
+            "label": "2"
+          }
+        ],
+        "default": "2"
+      },
+      {
+        "type": "header",
+        "content": "Product form"
+      },
+      {
+        "type": "checkbox",
+        "id": "display_product_quantity",
+        "label": "Show quantity box"
+      },
+      {
+        "type": "checkbox",
+        "id": "limit_quantity",
+        "label": "Limit quantity to available inventory"
+      },
+      {
+        "type": "checkbox",
+        "id": "display_inventory_left",
+        "label": "Show inventory remaining"
+      },
+      {
+        "type": "range",
+        "id": "inventory_threshold",
+        "label": "Inventory remaining threshold",
+        "min": 2,
+        "max": 40,
+        "default": 10,
+        "info": "Inventory remaining will only appear if under the threshold amount."
+      },
+      {
+        "type": "radio",
+        "id": "product_form_style",
+        "label": "Options style ([?](https:\/\/help.outofthesandbox.com\/hc\/en-us\/articles\/115006911447-Enabling-Color-Swatches-for-Products))",
+        "options": [
+          {
+            "value": "dropdown",
+            "label": "Select drop-down list"
+          },
+          {
+            "value": "swatches",
+            "label": "Color swatches"
+          }
+        ],
+        "default": "dropdown"
+      },
+      {
+        "type": "text",
+        "id": "free_price_text",
+        "label": "Free text (for $0 products)",
+        "default": "Free"
+      },
+      {
+        "type": "page",
+        "id": "size_chart",
+        "label": "Size chart ([?](https:\/\/help.outofthesandbox.com\/hc\/en-us\/articles\/115006910707-Using-the-Size-Chart-Sections-themes-))"
+      },
+      {
+        "type": "header",
+        "content": "Back in stock request form"
+      },
+      {
+        "type": "paragraph",
+        "content": "Let customers signup to be notified when a sold out product becomes available. [Learn more](https:\/\/help.outofthesandbox.com\/hc\/en-us\/articles\/115013035567-How-does-the-back-in-stock-notification-form-work-)."
+      },
+      {
+        "type": "checkbox",
+        "id": "notify_me_form",
+        "label": "Enable \"Back in stock request\" form"
+      },
+      {
+        "type": "richtext",
+        "id": "notify_me_richtext",
+        "label": "\"Back in stock request\" form text",
+        "default": "<p>Notify me when this product is available:<\/p>"
+      },
+      {
+        "type": "header",
+        "content": "Product gallery"
+      },
+      {
+        "type": "select",
+        "id": "product_slideshow_animation",
+        "label": "Image gallery",
+        "options": [
+          {
+            "value": "none",
+            "label": "None"
+          },
+          {
+            "value": "slide",
+            "label": "Slide"
+          },
+          {
+            "value": "fade",
+            "label": "Fade"
+          },
+          {
+            "value": "zoom",
+            "label": "Hover to zoom"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "thumbnail_position",
+        "label": "Image gallery thumbnails",
+        "default": "right-thumbnails",
+        "options": [
+          {
+            "value": "no-thumbnails",
+            "label": "None"
+          },
+          {
+            "value": "left-thumbnails",
+            "label": "Left"
+          },
+          {
+            "value": "bottom-thumbnails",
+            "label": "Bottom"
+          },
+          {
+            "value": "right-thumbnails",
+            "label": "Right"
+          }
+        ]
+      },
+      {
+        "type": "range",
+        "id": "slideshow_speed",
+        "label": "Change slides every",
+        "min": 4,
+        "max": 12,
+        "step": 1,
+        "default": 6,
+        "unit": "sec"
+      },
+      {
+        "type": "header",
+        "content": "Quick shop"
+      },
+      {
+        "type": "checkbox",
+        "id": "quick_shop_enabled",
+        "label": "Enable quick shop"
+      },
+      {
+        "type": "radio",
+        "id": "product_description_position",
+        "label": "Description position",
+        "options": [
+          {
+            "value": "top",
+            "label": "Above 'add to cart'"
+          },
+          {
+            "value": "bottom",
+            "label": "Below 'add to cart'"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "description_words",
+        "label": "Product description truncated words",
+        "options": [
+          {
+            "value": "none",
+            "label": "None"
+          },
+          {
+            "value": "10",
+            "label": "10"
+          },
+          {
+            "value": "15",
+            "label": "15"
+          },
+          {
+            "value": "20",
+            "label": "20"
+          },
+          {
+            "value": "25",
+            "label": "25"
+          },
+          {
+            "value": "30",
+            "label": "30"
+          },
+          {
+            "value": "35",
+            "label": "35"
+          },
+          {
+            "value": "40",
+            "label": "40"
+          }
+        ],
+        "default": "30"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_payment_button",
+        "label": "Show dynamic checkout button",
+        "default": true,
+        "info": "Each customer will see their preferred payment method from those available on your store, such as PayPal or Apple Pay. [Learn more](https:\/\/help.shopify.com\/manual\/using-themes\/change-the-layout\/dynamic-checkout)."
+      },
+      {
+        "type": "header",
+        "content": "Reviews"
+      },
+      {
+        "type": "paragraph",
+        "content": "Before enabling reviews you will need to install the free [Shopify Product Reviews](https:\/\/apps.shopify.com\/product-reviews) app."
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_shopify_review_comments",
+        "label": "Enable reviews",
+        "default": false
+      },
+      {
+        "type": "radio",
+        "id": "review_position",
+        "label": "Reviews position",
+        "default": "bottom",
+        "options": [
+          {
+            "value": "top",
+            "label": "Top"
+          },
+          {
+            "value": "bottom",
+            "label": "Bottom"
+          }
+        ]
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_shopify_collection_badges",
+        "label": "Display star rating on collection thumbnails",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_shopify_product_badges",
+        "label": "Display star rating on product page",
+        "info": "Positioned below the product title",
+        "default": false
+      }
+    ]
+  },
+  {
+    "name": "Cart",
+    "settings": [
+      {
+        "type": "select",
+        "id": "cart_action",
+        "label": "Cart type",
+        "options": [
+          {
+            "value": "ajax",
+            "label": "Inline"
+          },
+          {
+            "value": "redirect_cart",
+            "label": "Page"
+          },
+          {
+            "value": "redirect_checkout",
+            "label": "Checkout"
+          }
+        ],
+        "default": "ajax"
+      },
+      {
+        "type": "header",
+        "content": "Shipping rates calculator"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_shipping_calculator",
+        "label": "Enable shipping rates calculator"
+      },
+      {
+        "type": "text",
+        "id": "shipping_calculator_default_country",
+        "label": "Shipping calculator default country selection",
+        "default": "United States"
+      },
+      {
+        "type": "paragraph",
+        "content": "If your customer is logged-in, the country in their default shipping address will be selected. If you are not sure about the spelling to use above, refer to your first checkout page."
+      }
+    ]
+  },
+  {
+    "name": "DISQUS comments",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "disqus_enabled",
+        "label": "Enable [DISQUS](http:\/\/disqus.com\/) comments (instead of Shopify's default comments)"
+      },
+      {
+        "type": "text",
+        "id": "disqus_shortname",
+        "label": "[DISQUS](http:\/\/disqus.com\/) shortname"
+      }
+    ]
+  },
+  {
+    "name": "Currency",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "show_multiple_currencies",
+        "label": "Enable currency conversion",
+        "default": false,
+        "info": "Even though prices are displayed in different currencies, orders will still be processed in your store's currency."
+      },
+      {
+        "type": "select",
+        "id": "currency_format",
+        "label": "Format",
+        "options": [
+          {
+            "value": "money_format",
+            "label": "Without currency ($10.00)"
+          },
+          {
+            "value": "money_with_currency_format",
+            "label": "With currency ($10.00 CAD)"
+          }
+        ],
+        "default": "money_with_currency_format"
+      },
+      {
+        "type": "text",
+        "id": "supported_currencies",
+        "label": "Supported currencies",
+        "default": "USD CAD INR GBP AUD EUR JPY",
+        "info": "Use the country's ISO [currency code](http:\/\/www.xe.com\/iso4217.php). Separate your currency codes with a space."
+      },
+      {
+        "type": "text",
+        "id": "default_currency",
+        "label": "Default currency",
+        "default": "USD"
+      }
+    ]
+  },
+  {
+    "name": "Popup",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "To test this feature, set the number of days until the popup is displayed again to Test mode."
+      },
+      {
+        "type": "checkbox",
+        "id": "newsletter_popup",
+        "label": "Enable popup"
+      },
+      {
+        "type": "checkbox",
+        "id": "newsletter_popup_mobile",
+        "label": "Show popup on mobile"
+      },
+      {
+        "type": "text",
+        "id": "newsletter_popup_title",
+        "label": "Heading"
+      },
+      {
+        "type": "image_picker",
+        "id": "newsletter_popup_image",
+        "label": "Image"
+      },
+      {
+        "type": "richtext",
+        "id": "newsletter_popup_text",
+        "label": "Text"
+      },
+      {
+        "type": "url",
+        "id": "newsletter_popup_link",
+        "label": "Link"
+      },
+      {
+        "type": "range",
+        "id": "newsletter_popup_max_width",
+        "label": "Maximum width",
+        "min": 460,
+        "max": 800,
+        "step": 20,
+        "default": 600
+      },
+      {
+        "type": "range",
+        "id": "newsletter_popup_seconds",
+        "label": "Popup delay",
+        "min": 0,
+        "max": 120,
+        "step": 2,
+        "default": 2,
+        "unit": "sec"
+      },
+      {
+        "type": "select",
+        "id": "newsletter_popup_days",
+        "label": "Days until popup is displayed again",
+        "options": [
+          {
+            "value": "0",
+            "label": "Test mode"
+          },
+          {
+            "value": "2",
+            "label": "2 days"
+          },
+          {
+            "value": "7",
+            "label": "7 days"
+          },
+          {
+            "value": "14",
+            "label": "14 days"
+          },
+          {
+            "value": "30",
+            "label": "30 days"
+          },
+          {
+            "value": "90",
+            "label": "90 days"
+          },
+          {
+            "value": "365",
+            "label": "365 days"
+          }
+        ],
+        "default": "30"
+      },
+      {
+        "type": "header",
+        "content": "Newsletter"
+      },
+      {
+        "type": "checkbox",
+        "id": "newsletter_popup_form",
+        "label": "Show newsletter form",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "display_first_name",
+        "label": "Show first name"
+      },
+      {
+        "type": "checkbox",
+        "id": "display_last_name",
+        "label": "Show last name"
+      }
+    ]
+  },
+  {
+    "name": "Social media",
+    "settings": [
+      {
+        "type": "text",
+        "id": "twitter_link",
+        "label": "Twitter link",
+        "info": "https:\/\/twitter.com\/shopify"
+      },
+      {
+        "type": "text",
+        "id": "facebook_link",
+        "label": "Facebook link",
+        "info": "https:\/\/facebook.com\/shopify"
+      },
+      {
+        "type": "text",
+        "id": "google_link",
+        "label": "Google+ link",
+        "info": "https:\/\/plus.google.com\/+shopify"
+      },
+      {
+        "type": "text",
+        "id": "youtube_link",
+        "label": "YouTube link",
+        "info": "https:\/\/youtube.com\/user\/shopify"
+      },
+      {
+        "type": "text",
+        "id": "vimeo_link",
+        "label": "Vimeo link",
+        "info": "https:\/\/vimeo.com\/shopify"
+      },
+      {
+        "type": "text",
+        "id": "pinterest_link",
+        "label": "Pinterest link",
+        "info": "https:\/\/pinterest.com\/shopify"
+      },
+      {
+        "type": "text",
+        "id": "tumblr_link",
+        "label": "Tumblr link",
+        "info": "https:\/\/shopify.tumblr.com\/"
+      },
+      {
+        "type": "text",
+        "id": "instagram_link",
+        "label": "Instagram link",
+        "info": "https:\/\/instagram.com\/shopify"
+      },
+      {
+        "type": "text",
+        "id": "snapchat_link",
+        "label": "Snapchat link",
+        "info": "https:\/\/www.snapchat.com\/add\/shopify"
+      },
+      {
+        "type": "text",
+        "id": "houzz_link",
+        "label": "Houzz link",
+        "info": "https:\/\/www.houzz.com\/shopify"
+      },
+      {
+        "type": "text",
+        "id": "linkedin_link",
+        "label": "LinkedIn link",
+        "info": "https:\/\/linkedin.com\/company\/shopify"
+      },
+      {
+        "type": "text",
+        "id": "email_link",
+        "label": "Email address"
+      }
+    ]
+  },
+  {
+    "name": "Search",
+    "settings": [
+      {
+        "type": "select",
+        "id": "search_option",
+        "label": "Search results",
+        "options": [
+          {
+            "value": "products",
+            "label": "Products"
+          },
+          {
+            "value": "everything",
+            "label": "Everything"
+          }
+        ],
+        "default": "products"
+      }
+    ]
+  },
+  {
+    "name": "Favicon",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon",
+        "info": "32 x 32px .png required"
+      }
+    ]
+  }
+]

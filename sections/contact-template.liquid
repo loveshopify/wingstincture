@@ -1,0 +1,272 @@
+<div class="container">
+<div class="sixteen columns">
+  <div class="section clearfix">
+    <h1>{{ page.title }}</h1>
+  </div>
+</div>
+
+<div class="contact_form {% if section.settings.contact_image != blank %}contact_text_position--{{ section.settings.contact_text_position }}{% endif %}">
+  {% if section.settings.contact_image != blank %}
+    <div class="eight columns contact_image">
+      {% if section.settings.contact_image != blank %}
+        {{ section.settings.contact_image | img_url: '580x', scale: 2 | img_tag: section.settings.contact_image.alt, 'lazyload lazyload--fade-in' }}
+      {% else %}
+        {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+      {% endif %}
+    </div>
+  {% endif %}
+  <div class="eight columns {% if section.settings.contact_image == blank %}offset-by-four{% endif %} contact_content">
+    {% if page.content != blank %}
+      <div class="contact_text">
+        {{ page.content }}
+      </div>
+    {% endif %}
+    {% if section.settings.newsletter_richtext != blank %}
+      {{ section.settings.newsletter_richtext }}
+    {% endif %}
+    {% form 'contact' %}
+      {% if form.posted_successfully? %}
+        <p class="quote">{{ 'contact.form.post_success' | t }}</p>
+      {% endif %}
+
+      {% if form.errors %}
+        <p class="quote">{{ 'general.forms.post_error' | t }}</p>
+
+       {% assign message = 'contact.form.message' | t %}
+        <ul class="center">
+          {% for field in form.errors %}
+            {% if field == 'form' %}
+              <li>
+                {{ form.errors.messages[field] }}
+              </li>
+            {% else %}
+              <li>
+                {% assign field_name = field | replace: 'body', message %}
+                {{ 'general.forms.post_field_error_html' | t: field: field_name, error: form.errors.messages[field] }}
+              </li>
+            {% endif %}
+          {% endfor %}
+         </ul>
+      {% endif %}
+
+       <div class="four columns alpha">
+        {% assign name_attr = 'contact.form.name' | handle %}
+        <label for="contactFormName">{{ 'contact.form.name' | t }} <span class="red">*</span></label>
+        <input type="text" id="contactFormName" name="contact[{{ name_attr }}]" placeholder="{{ 'contact.form.name' | t }}" autocapitalize="words" value="{% if form[name_attr] %}{{ form[name_attr] }}{% elsif customer %}{{ customer.name }}{% endif %}" required="required">
+       </div>
+       <div class="four columns omega">
+        <label for="contactFormEmail">{{ 'contact.form.email' | t }} <span class="red">*</span></label>
+        <input type="email" id="contactFormEmail" name="contact[email]" placeholder="{{ 'contact.form.email' | t }}" autocorrect="off" autocapitalize="off" value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}" required="required">
+       </div>
+
+      <label for="contactFormMessage">{{ 'contact.form.message' | t }} <span class="red">*</span></label>
+      <textarea rows="5" id="contactFormMessage" name="contact[body]" placeholder="{{ 'contact.form.message' | t }}" required="required">{% if form.body %}{{ form.body }}{% endif %}</textarea>
+
+      <input type="submit" class="submit action_button" value="{{ 'contact.form.send' | t }}" />
+    {% endform %}
+  </div>
+</div>
+{% if section.settings.map_address != blank %}
+  {% if section.settings.wide_display %}
+    </div>
+  {% endif %}
+  {% include 'map-layout' %}
+{% endif %}
+
+{% unless section.settings.wide_display %}
+  </div>
+{% endunless %}
+
+{% schema %}
+
+{
+  "name": "Contact form",
+  "class": "contact-section",
+  "settings": [
+    {
+     "type": "image_picker",
+     "id": "contact_image",
+     "label": "Image"
+    },
+    {
+      "type": "select",
+      "id": "contact_text_position",
+      "label": "Image position",
+      "default": "left",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Map"
+    },
+    {
+      "type": "text",
+      "id": "map_address",
+      "label": "Map address",
+      "info": "Google maps will find the exact location."
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image",
+      "info": "Displayed if the map isn’t loaded."
+    },
+    {    
+      "type": "header",
+      "content": "Store hours"
+    },
+    {
+      "type": "checkbox",
+      "id": "store_hours",
+      "label": "Show store hours",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Come and visit"
+    },
+    {
+      "type": "richtext",
+      "id": "address_and_hours",
+      "label": "Address and hours",
+      "default": "<p>123 Fake Street</p><p>Toronto, Canada</p><p>Mon - Fri, 10am - 9pm</p><p>Saturday, 11am - 9pm</p><p>Sunday, 11am - 5pm</p>"
+    },
+    {
+      "type": "color",
+      "id": "info_text_color",
+      "label": "Text",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "info_color",
+      "label": "Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "richtext",
+      "id": "newsletter_richtext",
+      "label": "Text"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "wide_display",
+      "label": "Wide display",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "map_position",
+      "label": "Map position",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "zoom_level",
+      "min": 1,
+      "max": 20,
+      "step": 1,
+      "unit": "x",
+      "label": "Map zoom level",
+      "default": 12
+    },
+    {
+      "type": "header",
+      "content": "API key"
+    },
+    {
+      "type": "text",
+      "id": "api_key",
+      "label": "Google Maps API key",
+      "info": "You’ll need to [register a Google Maps API Key](https://help.shopify.com/manual/using-themes/troubleshooting/map-section-api-key) to display the map."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_pin",
+      "label": "Show pin",
+      "info": "Requires use of API key.",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Map link label",
+      "info": "Requires use of API key.",
+      "default": "Directions"
+    },
+    {
+      "type": "select",
+      "id": "map_style",
+      "label": "Map color scheme",
+      "options": [
+            {
+              "value": "aubergine",
+              "label": "Aubergine"
+            },
+            {
+              "value": "default",
+              "label": "Default"
+            },
+            {
+              "value": "night",
+              "label": "Night"
+            },
+            {
+              "value": "retro",
+              "label": "Retro"
+            },
+            {
+              "value": "silver",
+              "label": "Silver"
+            }
+      ],
+      "default": "default",
+      "info": "Requires use of API key."
+    }
+  ]
+}
+
+{% endschema %}

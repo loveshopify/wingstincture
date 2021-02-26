@@ -1,0 +1,220 @@
+{% if section.settings.grid_layout == false %}
+  {% assign grid_layout = 'standard' %}
+{% endif %}
+
+<div class="featured_collections grid-layout--{{grid_layout}} {% if grid_layout == 'standard' %} container {% endif %}
+            clearfix across-{{section.settings.featured_links_per_row}}">
+  {% if grid_layout == 'standard' %}<div class="sixteen columns">{% endif %}
+    {% if section.blocks.size > 0 %}
+      {% for block in section.blocks %}
+        {% capture right_text %}
+          <section class="featured-link--section featured-link--image section-{{ forloop.index }}" {{ block.shopify_attributes }}>
+                    <div class="featured-link--half featured-link--image">
+                      <div class="featured-link--wrap">
+                        <a {% if block.settings.link != blank %}href="{{ block.settings.link }}"{% endif %} title="{{ block.settings.title | escape }}">
+                          {% if block.settings.image %}
+                            <img  src="{{ block.settings.image | img_url: '300x' }}"
+                                  alt="{{ block.settings.image.alt | escape }}"
+                                  data-src="{{ block.settings.image | img_url: '2048x' }}"
+                                  class="lazyload lazyload--fade-in"
+                                  data-sizes="auto"
+                                  data-srcset=" {{ block.settings.image | img_url: '2048x' }} 2048w,
+                                                {{ block.settings.image | img_url: '1600x' }} 1600w,
+                                                {{ block.settings.image | img_url: '1200x' }} 1200w,
+                                                {{ block.settings.image | img_url: '1000x' }} 1000w,
+                                                {{ block.settings.image | img_url: '800x' }} 800w,
+                                                {{ block.settings.image | img_url: '600x' }} 600w,
+                                                {{ block.settings.image | img_url: '400x' }} 400w"
+                                  />
+                          {% else %}
+                            {% capture i %}{% cycle "1", "2", "3", "4", "5", "6" %}{% endcapture %}
+                            {{ 'collection-' | append: i | placeholder_svg_tag: 'placeholder-svg placeholder-svg--promotions' }}
+                          {% endif %}
+                        </a>
+                      </div>
+                    </div>
+                    <div class="featured-link--half">
+                      <div class="info text-align--{{block.settings.frontpage_text_align}}">
+                        <a {% if block.settings.link != blank %}href="{{ block.settings.link }}"{% endif %} class="collection_title">
+                          {{ block.settings.title | escape }}
+                        </a>
+                        {% if block.settings.text != blank %}
+                          <div class="description">{{ block.settings.text }}</div>
+                        {% endif %}
+                        {% if block.settings.button_label != blank %}
+                          <a {% if block.settings.link != blank %}href="{{ block.settings.link }}"{% endif %} class="action_button">
+                            {{ block.settings.button_label | escape }}
+                          </a>
+                        {% endif %}
+                      </div>
+                    </div>
+              </section>
+          {% endcapture %}
+          {% capture left_text %}
+              <section class="featured-link--section featured-link--image section-{{ forloop.index }}" {{ block.shopify_attributes }}>
+                <div class="featured-link--half">
+                  <div class="info text-align--{{block.settings.frontpage_text_align}}">
+                    <a {% if block.settings.link != blank %}href="{{ block.settings.link }}"{% endif %} class="collection_title">
+                      {{ block.settings.title | escape }}
+                    </a>
+                    {% if block.settings.text != blank %}
+                      <div class="description">{{ block.settings.text }}</div>
+                    {% endif %}
+                    {% if block.settings.button_label != blank %}
+                      <a {% if block.settings.link != blank %}href="{{ block.settings.link }}"{% endif %} class="action_button">
+                        {{ block.settings.button_label | escape }}
+                      </a>
+                    {% endif %}
+                  </div>
+                </div>
+                <div class="featured-link--half featured-link--image">
+                  <div class="featured-link--wrap">
+                    <a {% if block.settings.link != blank %}href="{{ block.settings.link }}"{% endif %} title="{{ block.settings.title | escape }}">
+                      {% if block.settings.image %}
+                        <img  src="{{ block.settings.image | img_url: '300x' }}"
+                              alt="{{ block.settings.image.alt | escape }}"
+                              data-src="{{ block.settings.image | img_url: '2048x' }}"
+                              class="lazyload lazyload--fade-in"
+                              data-sizes="auto"
+                              data-srcset=" {{ block.settings.image | img_url: '2048x' }} 2048w,
+                                            {{ block.settings.image | img_url: '1600x' }} 1600w,
+                                            {{ block.settings.image | img_url: '1200x' }} 1200w,
+                                            {{ block.settings.image | img_url: '1000x' }} 1000w,
+                                            {{ block.settings.image | img_url: '800x' }} 800w,
+                                            {{ block.settings.image | img_url: '600x' }} 600w,
+                                            {{ block.settings.image | img_url: '400x' }} 400w"
+                               />
+                      {% else %}
+                        {% capture i %}{% cycle "1", "2", "3", "4", "5", "6" %}{% endcapture %}
+                        {{ 'collection-' | append: i | placeholder_svg_tag: 'placeholder-svg placeholder-svg--promotions' }}
+                      {% endif %}
+                    </a>
+                  </div>
+                </div>
+              </section>
+        {% endcapture %}
+        {% if block.settings.grid_text_position == 'right' %}
+          {{ right_text }}
+        {% endif %}
+        {% if block.settings.grid_text_position == 'left' %}
+          {{ left_text }}
+        {% endif %}
+
+      {% endfor %}
+    {% endif %}
+  {% if grid_layout == 'standard' %}</div>{% endif %}
+</div>
+
+{% schema %}
+{
+  "name": "Image with text",
+  "class": "image-with-text-section",
+  "max_blocks": 16,
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "grid_layout",
+      "label": "Wide display",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "featured_links_per_row",
+      "label": "Images per row",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        }
+      ]
+    } 
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Image with text",
+      "settings": [    
+        {
+          "type": "select",
+          "id": "grid_text_position",
+          "label": "Image position",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ]
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+          "info": "1000 x 1000px recommended"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading",
+          "default": "Your headline"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Promotion description appears here.</p>"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button label",
+          "default": "View all"
+        },
+        {
+          "type": "select",
+          "id": "frontpage_text_align",
+          "label": "Text alignment",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "presets": [{
+    "name": "Image with text",
+    "category": "Image",
+    "settings": {
+      "featured_links_per_row": "1"
+    },
+    "blocks": [
+      {
+        "type": "image"
+      }
+    ]
+  }]
+}
+{% endschema %}

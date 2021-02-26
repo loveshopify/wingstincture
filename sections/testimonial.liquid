@@ -1,0 +1,196 @@
+<div class="testimonial-container clearfix" data-section-id="{{ section.id }}">
+  {% if section.blocks.size > 0 %}
+    <div  id="testimonial_slider" class="flexslider testimonial_slider"
+          data-slideshow-animation="{{ section.settings.slideshow_animation }}"
+          data-slideshow-speed="{{ section.settings.slideshow_speed }}">
+      <ul class="slides">
+        {% for block in section.blocks %}
+          <li {{ block.shopify_attributes }} data-block-id="{{block.id}}">
+            <section class="{% if block.settings.image_position == 'right' %}testimonial-image-right{% endif %} featured-link--section featured-link--image section-{{ forloop.index }}">
+              <div class="featured-link--half">
+                <div class="featured-link--wrap">
+                  <a {% if block.settings.link != blank %}href="{{ block.settings.link }}"{% endif %} title="{{ block.settings.title | escape }}">
+                    {% if block.settings.image %}
+                      <img  src="{{ block.settings.image | img_url: '300x' }}"
+                            alt="{{ block.settings.image.alt }}"
+                            data-src="{{ block.settings.image | img_url: '2048x' }}"
+                            class="lazyload lazyload--fade-in testimonial__image"
+                            data-sizes="auto"
+                            data-srcset=" {{ block.settings.image | img_url: '2048x' }} 2048w,
+                                          {{ block.settings.image | img_url: '1600x' }} 1600w,
+                                          {{ block.settings.image | img_url: '1200x' }} 1200w,
+                                          {{ block.settings.image | img_url: '1000x' }} 1000w,
+                                          {{ block.settings.image | img_url: '800x' }} 800w,
+                                          {{ block.settings.image | img_url: '600x' }} 600w,
+                                          {{ block.settings.image | img_url: '400x' }} 400w"
+                             />
+                    {% else %}
+                      {% capture i %}{% cycle "1", "2", "3", "4", "5", "6" %}{% endcapture %}
+                      {{ 'collection-' | append: i | placeholder_svg_tag: 'placeholder-svg placeholder-svg--promotions' }}
+                    {% endif %}
+                  </a>
+                </div>
+              </div>
+              <div class="featured-link--half ">
+                <div class="info text-align--{{block.settings.frontpage_text_align}}">
+                  {% if block.settings.title != blank %}
+                    <h2>
+                      {{ block.settings.title | escape }}
+                    </h2>
+                  {% endif %}
+                  {% if block.settings.testimonial != blank %}
+                    <div class="description">{{ block.settings.testimonial }}</div>
+                  {% endif %}
+                  <p>
+                    {% if block.settings.name != blank %}
+                      <strong>&mdash; {{ block.settings.name | escape }}</strong>
+                      <br>
+                    {% endif %}
+
+                    {% if block.settings.site_name != blank %}
+                      {% if block.settings.site_link != blank %}<a href="{{ block.settings.site_link }}">{% endif %}
+                        {{ block.settings.site_name | escape }}
+                      {% if block.settings.site_link != blank %}</a>{% endif %}
+                    {% endif %}
+                  </p>
+                </div>
+              </div>
+            </section>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+</div>
+
+{% schema %}
+  {
+    "name": "Testimonials",
+    "class": "testimonial-section",
+    "max_blocks": 12,
+    "settings": [
+      {
+        "type": "select",
+        "id": "slideshow_animation",
+        "label": "Animation",
+        "options": [
+          {
+            "value": "fade",
+            "label": "Fade"
+          },
+          {
+            "value": "slide",
+            "label": "Slide"
+          }
+        ]
+      },
+      {
+        "type": "range",
+        "id": "slideshow_speed",
+        "label": "Change testimonials every",
+        "min": 4,
+        "max": 12,
+        "step": 1,
+        "default": 6,
+        "unit": "sec"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "quote",
+        "name": "Testimonial",
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image",
+            "info": "600 x 600px recommended"
+          },
+          {
+            "type": "select",
+            "id": "image_position",
+            "label": "Image position",
+            "options": [
+              {
+                "value": "left",
+                "label": "Left"
+              },
+              {
+                "value": "right",
+                "label": "Right"
+              }
+            ]
+          },
+          {
+            "type": "select",
+            "id": "frontpage_text_align",
+            "label": "Text alignment",
+            "options": [
+              {
+                "value": "left",
+                "label": "Left"
+              },
+              {
+                "value": "center",
+                "label": "Center"
+              },
+              {
+                "value": "right",
+                "label": "Right"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Heading",
+            "default": "Testimonial"
+          },
+          {
+            "type": "richtext",
+            "id": "testimonial",
+            "label": "Testimonial",
+            "default": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam quam enim, fringilla ut purus ut, pretium ullamcorper sem. In sit amet vestibulum tellus. Aenean gravida dolor eget mi bibendum semper. </p>"
+          },
+          {
+            "type": "text",
+            "id": "name",
+            "label": "Customer name",
+            "info": "Optional",
+            "default": "John Doe"
+          },
+          {
+            "type": "text",
+            "id": "site_name",
+            "label": "Customer",
+            "default": "Shopify.com",
+            "info": "Optional"
+          },
+          {
+            "type": "url",
+            "id": "site_link",
+            "label": "Store name",
+            "info": "Optional"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Testimonials",
+        "category": "Text",
+        "blocks": [
+          {
+            "type": "quote"
+          },
+          {
+            "type": "quote"
+          },
+          {
+            "type": "quote"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

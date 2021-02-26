@@ -1,0 +1,114 @@
+{% if section.blocks.size > 0 %}
+  <div class="sidebar four columns toggle-all--{{ section.settings.toggle }}">
+    <div class="sidebar_content">
+      {% for block in section.blocks %}
+        <div {{ block.shopify_attributes }}>
+          {% if block.type == 'menu' %}
+            {% assign sidebar_menu = linklists[block.settings.custom_menu_linklist] %}
+            {% if sidebar_menu != blank %}
+              <h4 class="toggle" aria-haspopup="true" aria-expanded="false"><span>+</span>{{ sidebar_menu.title }}</h4>
+              <ul class="blog_list toggle_list">
+                {% for link in sidebar_menu.links %}
+                  <li>
+                    <a {% if link.active or link.child_active %}class="active"{% endif %} href="{{ link.url }}">{{ link.title }}</a>
+
+                    {% if link.links != blank %}
+                      <span class="menu-toggle icon-arrow-down {% if link.active or link.child_active %}active{% endif %}" aria-haspopup="true" aria-expanded="{% if link.active or link.child_active %}true{% else %}false{% endif %}"> </span>
+
+                      <ul class="{% if link.active or link.child_active %}active{% endif %}">
+                        {% for sub_link in link.links %}
+                          <li class="sub-menu {% if sub_link.active or sub_link.child_active %}active{% endif %}">
+                            <a {% if sub_link.active %}class="active"{% endif %} href="{{ sub_link.url }}">{{ sub_link.title }}</a>
+
+                            {% if sub_link.links != blank %}
+                              <span class="menu-toggle icon-arrow-down {% if sub_link.active or sub_link.child_active %}active{% endif %}" aria-haspopup="true" aria-expanded="{% if sub_link.active or sub_link.child_active %}true{% else %}false{% endif %}"> </span>
+
+                              <ul class="{% if sub_link.active or sub_link.child_active %}active{% endif %}">
+                                {% for sub_sub_link in sub_link.links %}
+                                  <li class="sub-menu">
+                                    <a {% if sub_sub_link.active %}class="active"{% endif %} href="{{ sub_sub_link.url }}">{{ sub_sub_link.title }}</a>
+                                  </li>
+                                {% endfor %}
+                              </ul>
+                            {% endif %}
+                          </li>
+                        {% endfor %}
+                      </ul>
+                    {% endif %}
+                  </li>
+                {% endfor %}
+              </ul>
+            {% else %}
+              <h4 class="toggle" aria-haspopup="true" aria-expanded="false"><span>+</span>Menu title</h4>
+              <ul class="blog_list toggle_list">
+                <li><p>{{ 'homepage.onboarding.no_content' | t }}</p></li>
+              </ul>
+            {% endif %}
+
+          {% elsif block.type == 'page' %}
+            {% if block.settings.content_page != blank %}
+              <h4 class="toggle" aria-haspopup="true" aria-expanded="false"><span>+</span>{{ pages[block.settings.content_page].title }}</h4>
+              <ul class="blog_list toggle_list">
+                <li>{{ pages[block.settings.content_page].content }}</li>
+              </ul>
+            {% else %}
+              <h4 class="toggle"><span>+</span>Page title</h4>
+              <ul class="blog_list toggle_list">
+                <li><p>{{ 'homepage.onboarding.no_content' | t }}</p></li>
+              </ul>
+            {% endif %}
+
+          {% elsif block.type == 'search' %}
+            <form class="blog_search" action="/search">
+              <input type="hidden" name="type" value="article" />
+              <input type="text" name="q" class="search_box" placeholder="{{ 'general.search.title' | t }} {{ blog.title | escape }}..." autocapitalize="off" autocomplete="off" autocorrect="off" value="{{ search.terms }}" />
+            </form>
+
+          {% elsif block.type == 'newsletter' %}
+            <h4>{{ 'blogs.sidebar.subscribe' | t }}</h4>
+            {% if block.settings.newsletter_richtext != blank %}
+              {{ block.settings.newsletter_richtext }}
+            {% endif %}
+            {% include 'newsletter' %}
+
+          {% elsif block.type == 'recent_posts' %}
+            <h4 class="toggle" aria-haspopup="true" aria-expanded="false"><span>+</span>{{ 'blogs.sidebar.recent_articles' | t }}</h4>
+            <ul class="blog_list recent_articles toggle_list">
+              {% for article in blogs[blog_handle].articles limit:10 %}
+                <li>
+                  <a href="{{ article.url }}" title="{{ article.title | escape }}">{{ article.title }}</a>
+                  {% if section.settings.blog_date %}
+                    <div class="meta">
+                      <span class="label">{{ article.published_at | date: format: "month_day_year" }}</span>
+                    </div>
+                  {% endif %}
+                </li>
+              {% endfor %}
+            </ul>
+
+          {% elsif block.type == 'post_tags'  %}
+            <h4 class="toggle" aria-haspopup="true" aria-expanded="false"><span>+</span>{{ 'blogs.sidebar.categories' | t }}</h4>
+            <ul class="blog_list toggle_list">
+              {% if blogs[blog_handle].all_tags != blank %}
+                {% for tag in blogs[blog_handle].all_tags %}
+                  <li>
+                    <a href="{{ shop.url}}/blogs/{{ blogs[blog_handle].handle }}/tagged/{{ tag | handleize }}" title="{{ blogs[blog_handle].title }} {{ 'blogs.general.tagged' | t }} {{ tag | escape }}" {% if current_tags contains tag %}class="active"{% endif %}>{{ tag }}</a>
+                  </li>
+                {% endfor %}
+              {% else %}
+                <li>{{ 'homepage.onboarding.no_content' | t }}</li>
+              {% endif %}
+            </ul>
+
+          {% elsif block.type == 'text' %}
+            <h4 class="toggle" aria-haspopup="true" aria-expanded="false"><span>+</span>{{ block.settings.title | escape }}</h4>
+            <ul class="blog_list toggle_list">
+              <li>{{ block.settings.text }}</li>
+            </ul>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endif %}
+

@@ -1,0 +1,39 @@
+<div class="sixteen columns clearfix collection_nav">
+  <h1 class="collection_title">
+    {{ page.title }}
+  </h1>
+</div>
+
+<div class="sixteen columns page">
+  {% if page.content contains "<!-- split -->" %}
+    {{ page.content | split: "<!-- split -->" | last }}
+  {% endif %}
+
+  {%- assign imgs = page.content | split: 'src="' -%}
+  {%- capture src_array -%}
+    {%- for img in imgs -%}
+       {{ img | split: '"' | first | replace: '//cdn', 'http://cdn' | replace: 'http:http://', 'http://' | remove: 'https:' | remove: 'http:' }}~
+      {% assign imageAmount = forloop.length | minus: 1 %}
+    {%- endfor -%}
+  {%- endcapture -%}
+
+  {%- assign srcArray = src_array | split: '~' -%}
+
+  {% assign alts = page.content | split: 'alt="' %}
+  {%- capture altArray -%}
+    {%- for alt in alts -%}
+       {{ alt | split: '"' | first }}~
+    {%- endfor -%}
+  {%- endcapture -%}
+
+  {%- assign altArray = altArray | split: '~' -%}
+
+  {% for index in (1..imageAmount) %}
+    <div class="one-third column {% cycle "alpha","","omega" %}">
+      <a href="{{ srcArray[index] | strip }}" title="{{ altArray[index] | strip }}" class="lightbox" rel="gallery" data-fancybox-group="{{ page.handle }}">
+        <img src="{{ srcArray[index] | strip }}" alt="{{ altArray[index] | strip }}"/>
+      </a>
+    </div>
+    {% cycle clear_row: "","",'<br class="clear" />' %}
+  {% endfor %}
+</div>

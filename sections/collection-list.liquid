@@ -1,0 +1,167 @@
+{% assign collections_per_row = section.settings.frontpage_collections_per_row %}
+
+<div class="container">
+  {% if section.blocks.size > 0 %}
+    {% if section.settings.title != blank %}
+      <div class="sixteen columns">
+        <h2 class="title">
+          {{ section.settings.title | escape }}
+        </h2>
+        <div class="feature_divider"></div>
+      </div>
+    {% endif %}
+    <div class="sixteen columns">
+      <div class="section clearfix">
+        <div class="featured_collections">
+          {% for block in section.blocks %}
+
+            {% assign feature_collection = block.settings.feature_collection %}
+            {% assign collection = collections[feature_collection] %}
+
+            {% if block.settings.image %}
+              {% assign collection_image = block.settings.image %}
+              {% assign collection_image_alt = block.settings.image.alt | escape %}
+            {% elsif collection.image != blank %}
+              {% assign collection_image = collection.image %}
+              {% assign collection_image_alt = collection.title | escape %}
+            {% else collection.empty? == false %}
+              {% assign collection_image = collection.products.first.featured_image %}
+              {% assign collection_image_alt = collection.products.first.featured_image.alt | escape %}
+            {% endif %}
+
+            <div class="{% if collections_per_row == 2 %}eight columns {% cycle 'alpha', 'omega' %}{% elsif collections_per_row == 3 %}one-third column {% cycle 'alpha', '', 'omega' %}{% elsif collections_per_row == 4 %}four columns {% cycle 'alpha', '', '', 'omega' %}{% else %}one-fifth column {% cycle 'alpha', '', '', '', 'omega' %}{% endif %} thumbnail {% if section.settings.collection_count == blank and section.settings.frontpage_collections_title == blank %}blank{% endif %} {% cycle 'even', 'odd' %}">
+              <a href="{{ collection.url }}" title="{{ collection.title }}">
+                <div class="relative product_image">
+                  {% if collection_image != nil %}
+                      <img  src="{{ collection_image | img_url: '300x' }}"
+                            class="lazyload lazyload--fade-in"
+                            alt="{{ collection_image_alt }}"
+                            data-src="{{ collection_image | img_url: '1200x' }}"
+                            data-srcset=" {{ collection_image | img_url: '2048x' }} 2048w,
+                                          {{ collection_image | img_url: '1600x' }} 1600w,
+                                          {{ collection_image | img_url: '1200x' }} 1200w,
+                                          {{ collection_image | img_url: '1000x' }} 1000w,
+                                          {{ collection_image | img_url: '800x' }} 800w,
+                                          {{ collection_image | img_url: '600x' }} 600w,
+                                          {{ collection_image | img_url: '400x' }} 400w"
+                            />
+                  {% else %}
+                    {% capture num %}{% cycle "1", "2", "3", "4", "5", "6" %}{% endcapture %}
+                    {{ 'collection-' | append: num | placeholder_svg_tag: 'placeholder-svg' }}
+                  {% endif %}
+                </div>
+
+                {% if section.settings.collection_count %}
+                  <span class="price">
+                  {% if collection != blank %}
+                    {{ 'layout.counts.items_with_count' | t: count: collection.all_products_count }}
+                  {% else %}
+                    {{ 'layout.counts.items_with_count' | t: count: 3 }}
+                  {% endif %}
+                  </span>
+                {% endif %}
+
+                {% if section.settings.frontpage_collections_title %}
+                  <div class="info">
+                    <span class="title">
+                    {% if collection != blank %}
+                      {{ collection.title }}
+                    {% else %}
+                      {{ "homepage.onboarding.collection_title" | t }}
+                    {% endif %}
+                    </span>
+                  </div>
+                {% endif %}
+              </a>
+            </div>
+
+            {% if collections_per_row == 2 %}
+              {% cycle '', '<br class="clear product_clear" />' %}
+            {% elsif collections_per_row == 3 %}
+              {% cycle '', '', '<br class="clear product_clear" />' %}
+            {% elsif collections_per_row == 4 %}
+              {% cycle '', '', '', '<br class="clear product_clear" />' %}
+            {% elsif collections_per_row == 5 %}
+              {% cycle '', '', '', '', '<br class="clear product_clear" />' %}
+            {% endif %}
+
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  {% endif %}
+</div>
+
+{% schema %}
+{
+  "name": "Collection list",
+  "class": "collection-list",
+  "max_blocks": 8,
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Collection list"
+    },
+    {
+      "type": "range",
+      "id": "frontpage_collections_per_row",
+      "label": "Collections per row",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "checkbox",
+      "id": "frontpage_collections_title",
+      "label": "Display collection title",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "collection_count",
+      "label": "Display collection product count",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection",
+      "name": "Collection",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "feature_collection",
+          "label": "Collection"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+          "info": "800 x 800px recommended"
+        }
+      ]
+    }
+  ],
+  "presets": [{
+    "name": "Collection list",
+    "category": "Collection",
+    "settings": {
+
+    },
+    "blocks": [
+      {
+        "type": "collection"
+      },
+      {
+        "type": "collection"
+      },
+      {
+        "type": "collection"
+      }
+    ]
+  }]
+}
+{% endschema %}

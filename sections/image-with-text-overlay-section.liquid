@@ -1,0 +1,150 @@
+<section {% if section.settings.image_stretch == false %}class="container"{% endif %}>
+  <div class="slider flexslider homepage_slider {% if section.settings.image_stretch == false %}sixteen columns{% endif %}">
+    <ul class="slides">
+      <li>
+        {% if section.settings.link != blank %}
+          <a href="{{ section.settings.link }}">
+        {% endif %}
+        {% if section.settings.image != nil %}
+          <img  alt="{{ section.settings.image.alt }}"
+              src="{{ section.settings.image | img_url: '300x' }}"
+              data-src="{{ section.settings.image | img_url: '2048x' }}"
+              class="lazyload lazyload--fade-in"
+              sizes="100vw"
+              srcset="  {{ section.settings.image | img_url: '2048x' }} 2048w,
+                        {{ section.settings.image | img_url: '1600x' }} 1600w,
+                        {{ section.settings.image | img_url: '1200x' }} 1200w,
+                        {{ section.settings.image | img_url: '1000x' }} 1000w,
+                        {{ section.settings.image | img_url: '800x' }} 800w,
+                        {{ section.settings.image | img_url: '600x' }} 600w,
+                        {{ section.settings.image | img_url: '400x' }} 400w"
+             />
+        {% else %}
+          {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg placeholder-svg--banner' }}
+        {% endif %}
+
+        {% if section.settings.link != blank %}
+          </a>
+        {% endif %}
+        {% if section.settings.image != blank or section.settings.title != blank or section.settings.subtext != blank or section.settings.button_label != blank %}
+          <div class="flex-caption">
+            <div class="container text-animation--none">
+              <div class="columns {% if section.settings.text_position == 'left' %} seven offset-by-one {% elsif section.settings.text_position == 'right' %} seven offset-by-eight {% else %} eight offset-by-four {% endif %} align_{{ section.settings.text_align }}">
+                {% if section.settings.title != blank %}
+                  <h1 class="headline">
+                    {{ section.settings.title | escape }}
+                  </h1>
+                {% endif %}
+                {% if section.settings.subtext != blank %}
+                  <div class="subtitle">
+                    {{ section.settings.subtext }}
+                  </div>
+                {% endif %}
+                {% if section.settings.button_label != blank %}
+                  <a {% if section.settings.link != blank %}href="{{ section.settings.link }}"{% endif %} class="action_button">
+                    {{ section.settings.button_label | escape }}
+                  </a>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        {% endif %}
+      </li>
+    </ul>
+  </div>
+</section>
+
+{% schema %}
+  {
+    "name": "Image with text overlay",
+    "class": "image-with-text-overlay-section",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "image_stretch",
+        "label": "Wide display",
+        "default": true
+      },
+      {
+        "type": "image_picker",
+        "id": "image",
+        "label": "Image",
+        "info": "1600 x 600px recommended"
+      },
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Heading"
+      },
+      {
+        "type": "richtext",
+        "id": "subtext",
+        "label": "Text",
+        "default": "<p></p>"
+      },
+      {
+        "type": "text",
+        "id": "button_label",
+        "label": "Button label"
+      },
+      {
+        "type": "url",
+        "id": "link",
+        "label": "Button link"
+      },
+      {
+        "type": "select",
+        "id": "text_position",
+        "label": "Text position",
+        "options": [
+          {
+            "value": "left",
+            "label": "Left"
+          },
+          {
+            "value": "center",
+            "label": "Center"
+          },
+          {
+            "value": "right",
+            "label": "Right"
+          }
+        ],
+        "default": "center"
+      },
+      {
+        "type": "select",
+        "id": "text_align",
+        "label": "Text alignment",
+        "options": [
+          {
+            "value": "left",
+            "label": "Left"
+          },
+          {
+            "value": "center",
+            "label": "Center"
+          },
+          {
+            "value": "right",
+            "label": "Right"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Image with text overlay",
+        "category": "Image",
+        "settings": {
+          "image": "",
+          "title": "Your Headline",
+          "text_position": "center",
+          "text_align": "center",
+          "button_label": "",
+          "link": ""
+        }
+      }
+    ]
+  }
+{% endschema %}

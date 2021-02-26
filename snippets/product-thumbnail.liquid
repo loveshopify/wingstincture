@@ -1,0 +1,209 @@
+{% if sidebar %}
+  <div class="{% if products_per_row == 2 %}six columns {% cycle collection_group_thumb: 'alpha', 'omega' %}{% elsif products_per_row == 3 %}four columns {% cycle collection_group_thumb: 'alpha', '', 'omega' %}{% else %}three columns {% cycle collection_group_thumb: 'alpha', '', '', 'omega' %}{% endif %} thumbnail {% cycle collection_group_mobile: 'even', 'odd' %} swap-{{ settings.collection_secondary_image }}" itemprop="itemListElement" itemscope itemtype="http://schema.org/Product">
+{% else %}
+  <div class="{% if products_per_row == 2 %}eight columns {% cycle collection_group_thumb: 'alpha', 'omega' %}{% elsif products_per_row == 3 %}one-third column {% cycle collection_group_thumb: 'alpha', '', 'omega' %}{% else %}four columns {% cycle collection_group_thumb: 'alpha', '', '', 'omega' %}{% endif %} thumbnail {% cycle collection_group_mobile: 'even', 'odd' %} swap-{{ settings.collection_secondary_image }}" itemprop="itemListElement" itemscope itemtype="http://schema.org/Product">
+{% endif %}
+
+  {% assign collection_handles = product.collections | map: 'handle' %}
+  {% if product.featured_image.alt contains 'youtube' or image.alt contains 'vimeo' %}
+    {% assign alt_text = product.title %}
+  {% else %}
+    {% assign alt_text = product.featured_image.alt %}
+  {% endif %}
+
+  {% if settings.align_height %}
+    {% assign collection_height = settings.collection_height | plus: 0 %}
+    {% assign product_aspect_ratio = product.featured_image.aspect_ratio | plus: 0 %}
+    {% assign product_set_width = product_aspect_ratio | times: collection_height %}
+
+    {% if product.featured_image.width >= product.featured_image.height %}
+      {% assign align_height_value = 'width: 100%; height: auto;' %}
+    {% else %}
+      {% assign align_height_value = 'width: 100%;' %}
+    {% endif %}
+
+  {% endif %}
+
+  <a href="{{ product.url | within: collection }}" itemprop="url">
+    <div class="relative product_image">
+
+      <div class="product_container">
+        <div class="image__container" style="{% if settings.align_height %} max-width: {{ product_set_width }}px; {% else %} max-width: {{- product.featured_image.width -}}px; {% endif %}">
+          <img  src="{{ product.featured_image | product_img_url: '300x' }}"
+                alt="{{ alt_text | escape }}"
+                class="lazyload lazyload--fade-in"
+                style="{{ align_height_value }} max-width: {{- product.featured_image.width -}}px;"
+                data-sizes="auto"
+                data-src="{{ product.featured_image | product_img_url: '2048x' }}"
+                data-srcset=" {{ product.featured_image | product_img_url: '2048x' }} 2048w,
+                              {{ product.featured_image | product_img_url: '1600x' }} 1600w,
+                              {{ product.featured_image | product_img_url: '1200x' }} 1200w,
+                              {{ product.featured_image | product_img_url: '1000x' }} 1000w,
+                              {{ product.featured_image | product_img_url: '800x' }} 800w,
+                              {{ product.featured_image | product_img_url: '600x' }} 600w,
+                              {{ product.featured_image | product_img_url: '400x' }} 400w"
+              />
+          {% if settings.collection_secondary_image != blank %}
+            <div class="image__container" style="max-width: {% if product.images[1] != blank %}{{- product.images[1].width -}}px{% else %}{{- product.featured_image.width -}}px{% endif %}; ">
+              <img src="{% if product.images[1] != blank %}{{ product.images[1] | product_img_url: '900x' }}{% else %}{{ product.featured_image | product_img_url: '900x' }}{% endif %}"
+              class="secondary lazyload"
+              alt="{{ alt_text | escape }}"
+              />
+            </div>
+          {% endif %}
+        </div>
+
+      </div>
+
+      <div class="quick_shop_container">
+        {% if settings.quick_shop_enabled %}
+          <span data-fancybox-href="#product-{{ product.id }}" class="quick_shop action_button" data-gallery="product-{{ product.id }}-gallery">
+            {{ 'collections.general.quick_shop' | t }}
+          </span>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="info">
+      <span class="title" itemprop="name">{{ product.title }}</span>
+      {% if settings.enable_shopify_collection_badges %}
+        <span class="shopify-product-reviews-badge" data-id="{{ product.id }}"></span>
+      {% endif %}
+      {% if settings.display_vendor_collection %}
+        <span class="vendor" itemprop="brand">{{ product.vendor }}</span>
+      {% endif %}
+
+      {% unless collection_handles contains 'coming-soon' %}
+        <span class="price {% if product.compare_at_price_max > product.price %}sale{% endif %}" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+          <meta itemprop="price" content="{{ product.price_min | money_without_currency | remove: "," }}" />
+          <meta itemprop="priceCurrency" content="{{ shop.currency }}" />
+          <meta itemprop="seller" content="{{ shop.name | escape }}" />
+          <link itemprop="availability" href="http://schema.org/{% if product.available %}InStock{% else %}OutOfStock{% endif %}">
+          <meta itemprop="itemCondition" itemtype="http://schema.org/OfferItemCondition" content="http://schema.org/NewCondition"/>
+          
+          {% if product.available %}
+            {% if product.price_varies and product.price_min > 0 %}
+              <small><em>{{ 'products.general.from' | t }}</em></small>
+            {% endif %}
+            {% if product.price_min > 0 %}
+              <span class="money">{{ product.price_min | money }}</span>
+            {% else %}
+              {{ settings.free_price_text }}
+            {% endif %}
+            {% if product.compare_at_price_max > product.price %}
+              <span class="was_price">
+                <span class="money">{{ product.compare_at_price_max | money }}</span>
+              </span>
+            {% endif %}
+          {% else %}
+            <span class="sold_out">{{ 'products.product.sold_out' | t }}</span>
+          {% endif %}
+        </span>
+      {% endunless %}
+    </div>
+    {% if settings.sale_banner_enabled and product.compare_at_price_max > product.price %}
+      <div class="sale_banner">{{ 'collections.general.sale' | t }}</div>
+    {% endif %}
+
+    {% if collection_handles contains 'new' %}
+      <div class="new_banner">{{ 'collections.general.new' | t }}</div>
+    {% endif %}
+    {% if collection_handles contains 'coming-soon' %}
+      <div class="new_banner">{{ 'collections.general.coming_soon' | t }}</div>
+    {% endif %}
+    {% if collection_handles contains 'pre-order' %}
+      <div class="new_banner">{{ 'collections.general.pre_order' | t }}</div>
+    {% endif %}
+  </a>
+  {% include 'collection-swatch' %}
+</div>
+
+{% if settings.quick_shop_enabled %}
+  {% if product.description contains "#tab1" %}
+    {% assign tabs = true %}
+  {% else %}
+    {% assign tabs = false %}
+  {% endif %}
+
+  <div id="product-{{ product.id }}" class="modal quick-shop-modal product-{{ product.id }}">
+    <div class="container section" style="width: inherit">
+      <div class="eight columns modal_image flex-active-slide">
+        {% assign featured_image = product.selected_or_first_available_variant.featured_image | default: product.featured_image %}
+        <img  src="{{ featured_image | product_img_url: '580x', scale: 2 }}"
+              class="lazyload lazyload--fade-in"
+              alt="{{ alt_text | escape }}" />
+      </div>
+      <div class="six columns">
+        <h3>{{ product.title }}</h3>
+        {% if settings.enable_shopify_collection_badges %}
+          <span class="shopify-product-reviews-badge" data-id="{{ product.id }}"></span>
+        {% endif %}
+        {% if settings.display_vendor_collection %}
+          <p class="vendor">
+            <span itemprop="brand">{{ product.vendor | link_to_vendor }}</span>
+          </p>
+        {% endif %}
+
+        {% assign variant = product.selected_or_first_available_variant %}
+
+        {% unless collection_handles contains 'coming-soon' %}
+          <p class="modal_price">
+            <span class="sold_out">{% if variant.available == false %}{{ 'products.product.sold_out' | t }}{% endif %}</span>
+            <span class="{% if variant.compare_at_price > variant.price %}sale{% endif %}">
+              <span class="current_price {% if product.available == false %}hidden{% endif %}">
+                {% if variant.price > 0 %}
+                  <span class="money">{{ variant.price | money }}</span>
+                {% else %}
+                  {{ settings.free_price_text }}
+                {% endif %}
+              </span>
+            </span>
+            <span class="was_price">
+              {% if variant.price < variant.compare_at_price and variant.available %}
+                <span class="money">{{ variant.compare_at_price | money }}</span>
+              {% endif %}
+            </span>
+          </p>
+
+          {% include 'product-notify-me' %}
+        {% endunless %}
+
+        {% if settings.product_description_position == "top" %}
+          {% if settings.description_words == "none" %}
+            {{ product.description | split: '<!-- split -->' | first }}
+          {% else %}
+            {% if tabs %}
+              {{ product.description | split: '<!-- split -->' | first }}
+            {% else %}
+              <p>{{ product.description | strip_html | truncatewords: settings.description_words }}</p>
+            {% endif %}
+          {% endif %}
+          <p>
+            <a href="{{ product.url | within: collection }}" class="view_product_info" title="{{ product.title | escape }}">{{ 'collections.general.view_product_details_html' | t }}</a>
+          </p>
+          <hr />
+        {% endif %}
+
+        {% unless collection_handles contains 'coming-soon' %}
+          {% include 'product-form', show_payment_button_quickshop: settings.show_payment_button %}
+        {% endunless %}
+
+        {% if settings.product_description_position == "bottom" %}
+          <hr />
+          {% if settings.description_words == "none" %}
+            {{ product.description | split: '<!-- split -->' | first }}
+          {% else %}
+            {% if tabs %}
+              {{ product.description | split: '<!-- split -->' | first }}
+            {% else %}
+              <p>{{ product.description | strip_html | truncatewords: settings.description_words }}</p>
+            {% endif %}
+          {% endif %}
+          <p>
+            <a href="{{ product.url | within: collection }}" class="view_product_info" title="{{ product.title | escape }}">{{ 'collections.general.view_product_details_html' | t }}</a>
+          </p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endif %}

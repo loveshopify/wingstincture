@@ -1,0 +1,234 @@
+<div class="container">
+  <div class="clearfix homepage_content">
+    {% if section.settings.title != blank %}
+      <div class="sixteen columns">
+        <h2 class="section-header home">
+          {{ section.settings.title | escape }}
+        </h2>
+      </div>
+    {% endif %}
+
+    <div class="sixteen columns clearfix frontpage_product_stagger--{{ section.settings.frontpage_product_stagger }}" itemtype="http://schema.org/ItemList">
+
+      {%- assign product = all_products[section.settings.featured_product] -%}
+      {%- assign collection_handles = product.collections | map: 'handle' -%}
+      {% if product.empty? %}
+        {%- assign section_onboarding = true -%}
+      {% else %}
+        {%- assign section_onboarding = false -%}
+      {% endif %}
+
+      <div itemprop="itemListElement" itemscope itemtype="http://schema.org/Product"
+            class="product-{{ product.id }} section clearfix product_section thumbnail_position--{{settings.thumbnail_position}} product_slideshow_animation--{{settings.product_slideshow_animation}}"
+            data-thumbnail="{{settings.thumbnail_position}}"
+            data-slideshow-animation="{{settings.product_slideshow_animation}}"
+            data-slideshow-speed="{{settings.slideshow_speed}}"
+            data-block-id="{{block.id}}"
+            {{ block.shopify_attributes }}>
+
+        {% if section.settings.grid_text_position == 'right' %}
+          <div class="six columns offset-by-one featured-product-image">
+            {% if section_onboarding %}
+              {% capture i %}{% cycle "1", "2" %}{% endcapture %}
+              {{ 'product-' | append: i | placeholder_svg_tag: 'placeholder-svg placeholder-svg--product' }}
+            {% else %}
+              {% include 'product-images' %}
+            {% endif %}
+          </div>
+        {% endif %}
+
+        <div class="seven columns {% if section.settings.frontpage_product_stagger %}{% cycle 'omega offset-by-one', '' %}{% else %}offset-by-one {% endif %} featured-product-info">
+          {% if section_onboarding %}
+            <h4 class="product_name title" itemprop="name">
+              <a href="{{ product.url }}">{{ 'homepage.onboarding.product_title' | t }}</a>
+            </h4>
+          {% else %}
+            <h4 class="product_name title" itemprop="name">
+              <a href="{{ product.url }}">{{ product.title }}</a>
+            </h4>
+
+            {% if settings.enable_shopify_product_badges %}
+              <span class="shopify-product-reviews-badge" data-id="{{ product.id }}"></span>
+            {% endif %}
+
+            {% if section.settings.display_vendor %}
+              <p class="vendor">
+                <span itemprop="brand">{{ product.vendor | link_to_vendor }}</span>
+              </p>
+            {% endif %}
+          {% endif %}
+
+          {% if section_onboarding %}
+            <p class="modal_price" itemscope itemtype="http://schema.org/Offer">
+              <span class="current_price">
+                $49.00
+              </span>
+            </p>
+          {% else %}
+            {% include 'size-chart-popup' %}
+
+            {% unless collection_handles contains 'coming-soon' %}
+              {% assign variant = product.selected_or_first_available_variant %}
+              <p class="modal_price" itemscope itemtype="http://schema.org/Offer">
+                  <meta itemprop="priceCurrency" content="{{ shop.currency }}" />
+                  <meta itemprop="seller" content="{{ shop.name | escape }}" />
+                  <link itemprop="availability" href="http://schema.org/{% if variant.available %}InStock{% else %}OutOfStock{% endif %}">
+                  <meta itemprop="itemCondition" itemtype="http://schema.org/OfferItemCondition" content="http://schema.org/NewCondition"/>
+
+                  <span class="sold_out">{% if variant.available == false %}{{ 'products.product.sold_out' | t }}{% endif %}</span>
+                  <span itemprop="price" content="{{ variant.price | money_without_currency | remove: "," }}" class="{% if variant.compare_at_price > variant.price %}sale{% endif %}">
+                    <span class="current_price">
+                      {% if variant.available %}
+                        {% if variant.price > 0 %}
+                          <span class="money">{{ variant.price | money }}</span>
+                        {% else %}
+                          {{ settings.free_price_text }}
+                        {% endif %}
+                      {% endif %}
+                    </span>
+                  </span>
+                  <span class="was_price">
+                  {% if variant.price < variant.compare_at_price %}
+                    <span class="money">{{ variant.compare_at_price | money }}</span>
+                  {% endif %}
+                  </span>
+              </p>
+            {% endunless %}
+          {% endif %}
+
+          {% if section.settings.product_description_position == 'top' %}
+            {% if section_onboarding %}
+              <div class="description" itemprop="description">
+                <p>
+                  {{ 'homepage.onboarding.product_description' | t }}
+                </p>
+              </div>
+            {% elsif section.settings.frontpage_display_description and product.description != blank %}
+              <div class="description" itemprop="description">
+                {{ product.description | split: '<!-- split -->' | first }}
+              </div>
+            {% endif %}
+            {% if product.available %}<hr />{% endif %}
+          {% endif %}
+
+          {% if section_onboarding %}
+            <button type="submit" name="add" class="action_button add_to_cart" data-label={{ add_to_cart_label | json }}><span class="text">{{ 'products.product.add_to_cart' | t }}</span></button>
+          {% else %}
+            {% unless collection_handles contains 'coming-soon' %}
+              {% include 'product-notify-me' %}
+              {% include 'product-form' with 'product' %}
+            {% endunless %}
+          {% endif %}
+
+          {% if section.settings.product_description_position == 'bottom' %}
+            {% if product.available %}<hr />{% endif %}
+            {% if section_onboarding %}
+              <div class="description" itemprop="description">
+                <p>
+                  {{ 'homepage.onboarding.product_description' | t }}
+                </p>
+              </div>
+            {% elsif section.settings.frontpage_display_description and product.description != blank %}
+              <div class="description" itemprop="description">
+                {{ product.description | split: '<!-- split -->' | first }}
+              </div>
+            {% endif %}
+          {% endif %}
+
+        </div>
+
+        {% if section.settings.grid_text_position == 'left' %}
+          <div class="six columns offset-by-one featured-product-image">
+            {% if section_onboarding %}
+              {% capture i %}{% cycle "1", "2" %}{% endcapture %}
+              {{ 'product-' | append: i | placeholder_svg_tag: 'placeholder-svg placeholder-svg--product' }}
+            {% else %}
+              {% include 'product-images' %}
+            {% endif %}
+          </div>
+        {% endif %}
+
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Featured product",
+  "class": "featured-product-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Featured product"
+    },
+    {
+      "type": "product",
+      "id": "featured_product",
+      "label": "Product"
+    },
+    {
+      "type": "checkbox",
+      "id": "display_vendor",
+      "label": "Show vendor",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "frontpage_display_description",
+      "label": "Show product description",
+      "default": true
+    },
+    {
+      "type": "radio",
+      "id": "product_description_position",
+      "label": "Description position",
+      "options": [
+        {
+          "value": "top",
+          "label": "Above 'add to cart'"
+        },
+        {
+          "value": "bottom",
+          "label": "Below 'add to cart'"
+        }
+      ],
+      "default": "bottom"
+    },
+    {
+      "type": "select",
+      "id": "grid_text_position",
+      "label": "Text position",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Dynamic checkout button"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_payment_button",
+      "label": "Show dynamic checkout button",
+      "default": true,
+      "info": "Each customer will see their preferred payment method from those available on your store, such as PayPal or Apple Pay. [Learn more](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)."
+    }
+  ],
+  "presets": [{
+    "name": "Featured product",
+    "category": "Product",
+    "settings": {
+    }
+  }]
+}
+{% endschema %}

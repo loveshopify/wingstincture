@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="{{ shop.locale }}">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="cleartype" content="on">
+    <meta name="robots" content="index,follow">
+
+    {% if current_tags %}{% assign meta_tags = current_tags | join: ', ' %}{% endif %}
+    <title>{% if template contains "index" %}{{ page_title }}{% else %}{{ page_title }}{% if current_tags %} {{ 'general.meta.tagged_html' | t: tags: meta_tags }}{% endif %}{% if current_page != 1 %} {{ 'general.meta.page' | t: page_number: current_page }}{% endif %}{% unless page_title contains shop.name %} - {{ shop.name }}{% endunless %}{% endif %}</title>
+
+    {% if page_description %}
+      <meta name="description" content="{{ page_description | escape }}{% if current_tags %} {{ 'general.meta.tagged_html' | t: tags: meta_tags | escape }}.{% endif %}{% if current_page != 1 %} {{ 'general.meta.page' | t: page_number: current_page }}.{% endif %}" />
+    {% endif %}
+
+    {% include 'social-meta-info' %}
+
+    {% if collection.previous_product %}
+      <link rel="prev" href="{{ collection.previous_product }}">
+    {% endif %}
+    {% if collection.next_product %}
+      <link rel="next" href="{{ collection.next_product }}">
+    {% endif %}
+
+    <!-- Mobile Specific Metas -->
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="theme-color" content="{{ settings.shop_bg_color }}">
+
+    <!-- Stylesheets for Mobilia 5.5.8 -->
+    {{ 'styles.scss.css' | asset_url | stylesheet_tag }}
+
+    <!-- Icons -->
+    {% if settings.favicon != nil %}
+      <link rel="shortcut icon" type="image/png" href="{{ settings.favicon | img_url: '32x32' }}">
+      <link rel="icon" type="image/png" sizes="192x192" href="{{ settings.favicon | img_url: '192x192' }}">
+      <link rel="apple-touch-icon" sizes="180x180" href="{{ settings.favicon | img_url: '180x180' }}">
+      <link rel="icon" type="image/png" sizes="32x32" href="{{ settings.favicon | img_url: '32x32' }}">
+      <link rel="icon" type="image/png" sizes="16x16" href="{{ settings.favicon | img_url: '16x16' }}">
+    {% else %}
+      <link rel="shortcut icon" type="image/png" href="{{ 'favicon.png' | asset_url }}">
+    {% endif %}
+
+    <link rel="canonical" href="{{ canonical_url }}" />
+
+    {% if template contains 'customer' %}
+      {{ "shopify_common.js" | shopify_asset_url | script_tag }}
+      {{ "customer_area.js"  | shopify_asset_url | script_tag }}
+    {% endif %}
+
+    {{ 'app.js' | asset_url | script_tag }}
+    {{ content_for_header }} 
+ {{ shop.metafields.fontify.stylesheets }}
+
+    <noscript>
+      <style>
+        .image__fallback {
+          width: 100vw;
+          display: block !important;
+          max-width: 100vw !important;
+          margin-bottom: 0;
+        }
+        .no-js-only {
+          display: inherit !important;
+        }
+        .icon-cart.cart-button {
+          display: none;
+        }
+        .lazyload {
+          opacity: 1;
+          -webkit-filter: blur(0);
+          filter: blur(0);
+        }
+        .animate_right,
+        .animate_left,
+        .animate_up,
+        .animate_down {
+          opacity: 1;
+        }
+        .flexslider .slides>li {
+          display: block;
+        }
+        .product_section .product_form {
+          opacity: 1;
+        }
+        .multi_select,
+        form .select {
+          display: block !important;
+        }
+        .swatch_options {
+          display: none;
+        }
+      </style>
+    </noscript>
+    <meta name="google-site-verification" content="7r3EPFrCtGrDhZOdhU2XuGXBYOeTJb73GpIpp5PdLUo" />
+  </head>
+  <body class="{{ template | replace: '.', '-' | handle }}"
+    data-money-format="{{ shop.money_format }}">
+
+    {% section 'header' %}
+
+    <div {% unless template contains "index" or template contains "article" or template contains "banner" or template contains "page.details" or template contains 'contact' %}class="container"{% endunless %}>
+        {{ content_for_layout }}
+        {% include "arp" %}
+    </div> <!-- end container -->
+
+    {% include 'cart-shipping-calculator' %}
+    {% section 'footer' %}
+
+    {% if settings.size_chart != blank %}
+      <div id="size-chart" class="size_chart_content">
+        <h5 class="center">{{ pages[settings.size_chart].title }}</h5>
+        {{ pages[settings.size_chart].content }}
+      </div>
+    {% endif %}
+
+    {% include 'newsletter-popup' %}
+    {% include 'currencies' %}
+    {% if settings.disqus_enabled %}
+      {% if template contains "blog" or template contains "article" or template contains "index" %}
+        <script id="dsq-count-scr" src="//{{ settings.disqus_shortname }}.disqus.com/count.js" async></script>
+      {% endif %}
+    {% endif %}
+   {% include 'smile-initializer' %}
+
+<!-- Begin ReCharge code -->
+
+<!-- End ReCharge code -->
+</body>
+</html>

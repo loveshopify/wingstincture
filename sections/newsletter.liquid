@@ -1,0 +1,129 @@
+
+<section class="{% if section.settings.wide_display == blank %}container{% endif %} fullWidth--{{ section.settings.wide_display }}">
+  <div class="newsletter-wrap newsletter--{{section.settings.text_align}}
+  {% if section.settings.wide_display != blank %}
+    container
+  {% endif %}">
+    <div class="text text-align--{{section.settings.text_align}} columns">
+      {% if section.settings.title %}
+        <h2>{{ section.settings.title }}</h2>
+      {% endif %}
+      {% if section.settings.newsletter_richtext != blank %}
+        <div class="newsletter-text">{{ section.settings.newsletter_richtext }}</div>
+      {% endif %}
+
+      {% include 'newsletter' %}
+
+    </div>
+  </div>
+
+
+</section>
+
+
+<style>
+  {% if section.settings.wide_display == true %}
+    #shopify-section-{{ section.id }}.newsletter-section {
+      padding: 20px 0;
+      background-color: {{ section.settings.bg_color }};
+      {% if section.settings.image != blank %}
+        background-image: url({{ section.settings.image | img_url: '1600x' }});
+      {% endif %}
+      background-size: cover;
+      background-position: center center;
+    }
+  {% else %}
+    #shopify-section-{{ section.id }}.newsletter-section .container {
+      padding: 20px 0;
+      margin: 10px auto;
+    }
+
+    #shopify-section-{{ section.id }}.newsletter-section .newsletter-wrap {
+      background-color: {{ section.settings.bg_color }};
+      {% if section.settings.image != blank %}
+        background-image: url({{ section.settings.image | img_url: '1600x' }});
+      {% endif %}
+      background-size: cover;
+      background-position: center center;
+    }
+
+  {% endif %}
+
+  #shopify-section-{{ section.id }}.newsletter-section .newsletter {
+    text-align: {{section.settings.text_align}};
+  }
+
+  #shopify-section-{{ section.id }}.newsletter-section p,
+  #shopify-section-{{ section.id }}.newsletter-section h2 {
+    color: {{ section.settings.text_color }};
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Newsletter",
+  "class": "newsletter-section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "wide_display",
+      "label": "Wide display"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Sign up today"
+    },
+    {
+      "type": "richtext",
+      "id": "newsletter_richtext",
+      "label": "Text",
+      "default": "<p>Sign up to get the latest on sales, new releases and more …</p>"
+    },
+    {
+      "type": "select",
+      "id": "text_align",
+      "label": "Text alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Background image",
+      "info": "1600 x 300px recommended"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#000000"
+    }
+  ],
+  "presets": [{
+    "name": "Newsletter",
+    "category": "Promotional",
+    "settings": {
+    }
+  }]
+}
+{% endschema %}

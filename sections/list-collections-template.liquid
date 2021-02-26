@@ -1,0 +1,95 @@
+{% paginate collections by section.settings.pagination_limit %}
+{% assign collections_per_row = section.settings.collections_per_row %}
+
+  <div class="sixteen columns clearfix collection_nav">
+    <h1 class="collection_title">{{ 'collections.general.title' | t }}</h1>
+  </div>
+
+  {% capture new_row %}
+      <br class="clear product_clear" />
+  {% endcapture %}
+
+  {% for collection in collections %}
+    {% unless collection.handle == 'frontpage' %}
+      {% capture collection_title %}{{ collection.title | escape }}{% endcapture %}
+      <div class="{% if collections_per_row == 2 %}eight columns{% elsif collections_per_row == 3 %}one-third column{% else %}four columns{% endif %} thumbnail {% cycle 'even', 'odd' %}">
+        <a href="{{ collection.url }}" title="{{ collection_title }}">
+          {% if collection.image %}
+            <img  src="{{ collection.image.src | img_url: '300x' }}"
+                  class="lazyload lazyload--fade-in"
+                  alt="{{ collection.image.alt | escape }}"
+                  style="max-width: {{- collection.image.width -}}px;"
+                  data-sizes="auto"
+                  data-src="{{ collection.image.src | img_url: '1160x' }}"
+                  data-srcset=" {{ collection.image.src | img_url: '2048x' }} 2048w,
+                                {{ collection.image.src | img_url: '1600x' }} 1600w,
+                                {{ collection.image.src | img_url: '1200x' }} 1200w,
+                                {{ collection.image.src | img_url: '1000x' }} 1000w,
+                                {{ collection.image.src | img_url: '800x' }} 800w,
+                                {{ collection.image.src | img_url: '600x' }} 600w,
+                                {{ collection.image.src | img_url: '400x' }} 400w"
+                  />
+          {% else %}
+            <img  src="{{ collection.products.first.featured_image | img_url: '300x' }}"
+                  class="lazyload lazyload--fade-in"
+                  alt="{{ collection.image.alt | escape }}"
+                  style="max-width: {{- collection.image.width -}}px;"
+                  data-sizes="auto"
+                  data-src="{{ collection.products.first.featured_image | img_url: '1160x' }}"
+                  data-srcset=" {{ collection.products.first.featured_image | img_url: '2048x' }} 2048w,
+                                {{ collection.products.first.featured_image | img_url: '1600x' }} 1600w,
+                                {{ collection.products.first.featured_image | img_url: '1200x' }} 1200w,
+                                {{ collection.products.first.featured_image | img_url: '1000x' }} 1000w,
+                                {{ collection.products.first.featured_image | img_url: '800x' }} 800w,
+                                {{ collection.products.first.featured_image | img_url: '600x' }} 600w,
+                                {{ collection.products.first.featured_image | img_url: '400x' }} 400w"
+                  />
+          {% endif %}
+
+          <div class="info">
+            <span class="title">{{ collection.title }}</span>
+          </div>
+        </a>
+      </div>
+
+      {% if collections_per_row == 2 %}
+        {% cycle '', new_row %}
+      {% elsif collections_per_row == 3 %}
+        {% cycle '', '', new_row %}
+      {% elsif collections_per_row == 4 %}
+        {% cycle '', '', '', new_row %}
+      {% endif %}
+    {% endunless %}
+  {% endfor %}
+
+  {% include 'pagination' %}
+{% endpaginate %}
+
+{% schema %}
+
+{
+  "name": "Collections",
+  "class": "collection-template-section",
+  "settings": [
+    {
+      "type": "range",
+      "id": "collections_per_row",
+      "label": "Collections per row",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "pagination_limit",
+      "label": "Collections per page",
+      "min": 1,
+      "max": 50,
+      "step": 1,
+      "default": 48
+    }
+  ]
+}
+
+{% endschema %}

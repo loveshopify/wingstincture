@@ -1,0 +1,107 @@
+<div class="container homepage_content twitter-feed-wrap">
+    {% if section.settings.twitter_content_page != blank %}
+      <div class="eight columns">
+        <h4 class="title"><a href="{{ pages[section.settings.twitter_content_page].url }}">{{ pages[section.settings.twitter_content_page].title }}</a></h4>
+        {% include 'page-multi-column', content: pages[section.settings.twitter_content_page].content %}
+      </div>
+    {% endif %}
+    {% if section.settings.twitter_username != blank %}
+      <div class="{% if section.settings.twitter_content_page != blank %}eight {% else %}sixteen{% endif %} columns">
+          <h4 class="title"><a href="https://twitter.com/{{ section.settings.twitter_username | replace: "@", "" | strip }}" target="_blank">{{ section.settings.title | escape }}</a></h4>
+          <a class="twitter-timeline" href="https://twitter.com/{{ section.settings.twitter_username | replace: "@", "" | strip }}" data-theme="{{ section.settings.twitter_theme }}" data-tweet-limit="{{ section.settings.tweet_count }}" data-widget-id="319998048782647298" data-screen-name="{{ section.settings.twitter_username | replace: "@", "" | strip }}" data-chrome="noheader nofooter noborders transparent" data-link-color="{{ settings.link_color }}" data-heading-style="color:{{ settings.link_color }};font-size:{{ settings.regular_font_size }}px;font-family: {{ settings.regular_font | replace: 'Google_', '' | replace: '+', ' ' | replace: '"', '' }}"></a>
+          <script defer>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+      </div>
+    {% else %}
+      <div class="{% if section.settings.twitter_content_page != blank %}eight {% else %}sixteen{% endif %} columns">
+        <h4 class="title">
+          <a href="https://twitter.com/{{ section.settings.title | escape }}" target="_blank">
+            {{ section.settings.title | escape }}
+          </a>
+        </h4>
+        <a class="twitter-timeline" data-theme="{{ section.settings.twitter_theme  }}" href="https://twitter.com/outofthesandbox" data-widget-id="319998048782647298" data-tweet-limit="{{ section.settings.tweet_count }}" data-screen-name="outofthesandbox" data-chrome="noheader nofooter noborders transparent" data-link-color="{{ settings.link_color }}" data-heading-style="color:{{ settings.link_color }};font-size:{{ settings.regular_font_size }}px;font-family: {{ settings.regular_font | replace: 'Google_', '' | replace: '+', ' ' | replace: '"', '' }}"></a>
+      </div>
+    {% endif %}
+</div>
+
+<style>
+  {% if section.settings.twitter_location == 'left' %}
+    .twitter-feed-section div.columns {
+      float: right;
+    }
+  {% endif %}
+</style>
+
+
+{% schema %}
+{
+  "name": "Twitter feed",
+  "class": "twitter-feed-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "twitter_username",
+      "label": "Twitter username"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Tweets"
+    },
+    {
+      "type": "radio",
+      "id": "twitter_theme",
+      "label": "Theme",
+      "default": "light",
+      "options": [
+        {
+          "value": "light",
+          "label": "Light"
+        },
+        {
+          "value": "dark",
+          "label": "Dark"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "tweet_count",
+      "label": "Number of tweets",
+      "min": 1,
+      "max": 10,
+      "step": 1,
+      "default": 2
+    },
+        {
+      "type": "page",
+      "id": "twitter_content_page",
+      "label": "Content page next to feed"
+    },
+    {
+      "type": "select",
+      "id": "twitter_location",
+      "label": "Feed position",
+      "default": "right",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    }
+  ],
+  "presets": [{
+    "name": "Twitter feed",
+    "category": "Social media",
+    "settings": {
+      "title": "Tweets"
+    }
+  }]
+}
+
+{% endschema %}

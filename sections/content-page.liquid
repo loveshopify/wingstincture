@@ -1,0 +1,32 @@
+<div class="container">
+  <div class="sixteen columns">
+    <div class="homepage_content section clearfix">
+      {% if section.settings.content_page != blank %}
+        {% include 'page-multi-column', content: pages[section.settings.content_page].content %}
+      {% else %}
+        {{ 'homepage.onboarding.no_content' | t }}
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+
+{
+  "name": "Page",
+  "class": "featured-content-section",
+  "settings": [
+    {
+      "type": "page",
+      "id": "content_page",
+      "label": "Content page"
+    }
+  ],
+  "presets": [{
+    "name": "Page",
+    "category": "Text",
+    "settings": {
+    }
+  }]
+}
+{% endschema %}

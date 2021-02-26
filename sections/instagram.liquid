@@ -1,0 +1,83 @@
+{% assign instagram_count = section.settings.instagram_count | times: 5 %}
+<div class="instagram-feed-wrap">
+  {% if section.settings.instagram_client_id != blank %}
+    <div class="container content">
+      <div class="section clearfix">
+        <div class="sixteen columns">
+        {% if section.settings.title != blank %}
+          <h2 class="title">
+            {% if settings.instagram_link != blank %}
+              <a href="{{ settings.instagram_link }}" target="_blank">
+            {% endif %}
+            {{ section.settings.title | escape }}
+            {% if settings.instagram_link != blank %}
+              </a>
+            {% endif %}
+          </h2>
+          <div class="feature_divider"></div>
+        {% endif %}
+        </div>
+      </div>
+    </div>
+    <div id="instafeed-{{section.id}}" class="js-instafeed clearfix" data-client-id="{{ section.settings.instagram_client_id | strip }}" data-count="{{ instagram_count }}"></div>
+  {% else %}
+    <div class="container content">
+      <div class="sixteen columns">
+        {% if section.settings.title != blank %}
+          <h2 class="title">
+            <a href="{{ settings.instagram_link }}" target="_blank">
+              {{ section.settings.title | escape }}
+            </a>
+          </h2>
+          <div class="feature_divider"></div>
+        {% endif %}
+      </div>
+    </div>
+    <div class="clearfix placeholder-instagram">
+      {% for i in (1..instagram_count) %}
+        <div class="instas">
+          <a href="#">
+            {{ 'image' | placeholder_svg_tag: 'placeholder-svg placeholder-svg--instagram' }}
+          </a>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+</div>
+
+{% schema %}
+{
+  "name": "Instagram feed",
+  "class": "instagram-feed-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "instagram_client_id",
+      "label": "Instagram access token ([?](https:\/\/outofthesandbox.com\/pages\/instagram-access-token))"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Instagram"
+    },
+    {
+      "type": "range",
+      "id": "instagram_count",
+      "label": "Number of rows",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "default": 1
+    }     
+  ],
+  "presets": [{
+    "name": "Instagram feed",
+    "category": "Social media",
+    "settings": {
+
+    }
+  }]
+}
+
+{% endschema %}

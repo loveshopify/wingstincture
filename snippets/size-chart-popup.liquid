@@ -1,0 +1,16 @@
+{% assign product_tags = product.tags | join: ' ' %}
+{% if product_tags contains 'meta-size-chart-' %}
+  {% for tag in product.tags %}
+    {% if tag contains 'meta-size-chart-' %}
+      {% assign size_chart = tag | handle | remove: 'meta-size-chart-' %}
+      <a href="#size-chart-{{ product.id }}" class="lightbox size_chart">{{ 'products.product.size_chart' | t }} <span class="icon-right-arrow"></span></a>
+      <div id="size-chart-{{ product.id }}" class="size_chart_content">
+        <h5 class="center">{{ pages[size_chart].title }}</h5>
+        <div class="feature_divider"></div>
+        {{ pages[size_chart].content }}
+      </div>
+    {% endif %}
+  {% endfor %}
+{% elsif settings.size_chart != blank %}
+  <a href="#size-chart" class="lightbox size_chart">{{ 'products.product.size_chart' | t }} <span class="icon-right-arrow"></span></a>
+{% endif %}

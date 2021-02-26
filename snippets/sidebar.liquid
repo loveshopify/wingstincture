@@ -1,0 +1,115 @@
+{% if section.blocks.size > 0 %}
+  <div class="sidebar four columns toggle-all--{{ section.settings.toggle }}">
+    {% for block in section.blocks %}
+      <div {{ block.shopify_attributes }}>
+        {% if block.type == 'menu' %}
+          {% assign sidebar_menu = linklists[block.settings.custom_menu_linklist] %}
+          {% if sidebar_menu != blank %}
+            <h4 class="toggle" aria-haspopup="true" aria-expanded="false"><span>+</span>{{ sidebar_menu.title }}</h4>
+            <ul class="blog_list toggle_list">
+              {% for link in sidebar_menu.links %}
+                <li>
+                  <a {% if link.active or link.child_active %}class="active"{% endif %} href="{{ link.url }}" aria-expanded="{% if link.active or link.child_active %}true{% else %}false{% endif %}">{{ link.title }}</a>
+
+                  {% if link.links != blank %}
+                    <span class="menu-toggle icon-arrow-down {% if link.active or link.child_active %}active{% endif %}" aria-haspopup="true" aria-expanded="{% if link.active or link.child_active %}true{% else %}false{% endif %}"> </span>
+
+                    <ul class="{% if link.active or link.child_active %}active{% endif %}">
+                      {% for sub_link in link.links %}
+                        <li class="sub-menu {% if sub_link.active or sub_link.child_active %}active{% endif %}">
+                          <a {% if sub_link.active %}class="active"{% endif %} href="{{ sub_link.url }}">{{ sub_link.title }}</a>
+
+                          {% if sub_link.links != blank %}
+                            <span class="menu-toggle icon-arrow-down {% if sub_link.active or sub_link.child_active %}active{% endif %}" aria-haspopup="true" aria-expanded="{% if sub_link.active or sub_link.child_active %}true{% else %}false{% endif %}"> </span>
+
+                            <ul class="{% if sub_link.active or sub_link.child_active %}active{% endif %}">
+                              {% for sub_sub_link in sub_link.links %}
+                                <li class="sub-menu">
+                                  <a {% if sub_sub_link.active %}class="active"{% endif %} href="{{ sub_sub_link.url }}">{{ sub_sub_link.title }}</a>
+                                </li>
+                              {% endfor %}
+                            </ul>
+                          {% endif %}
+                        </li>
+                      {% endfor %}
+                    </ul>
+                  {% endif %}
+                </li>
+              {% endfor %}
+            </ul>
+          {% else %}
+            <h4 class="toggle" aria-haspopup="true" aria-expanded="false"><span>+</span>Menu title</h4>
+            <ul class="blog_list toggle_list">
+              <li><p>{{ 'homepage.onboarding.no_content' | t }}</p></li>
+            </ul>
+          {% endif %}
+
+        {% elsif block.type == 'page' %}
+          {% if block.settings.content_page != blank %}
+            <h4 class="toggle" aria-haspopup="true" aria-expanded="false"><span>+</span>{{ pages[block.settings.content_page].title }}</h4>
+            <ul class="blog_list toggle_list content_block">
+              <li>{{ pages[block.settings.content_page].content }}</li>
+            </ul>
+          {% else %}
+            <h4 class="toggle"><span>+</span>Page title</h4>
+            <ul class="blog_list toggle_list">
+              <li><p>{{ 'homepage.onboarding.no_content' | t }}</p></li>
+            </ul>
+          {% endif %}
+
+        {% elsif block.type == 'filter_by_tag' %}
+          {% assign tag_count = collection.all_tags | size %}
+            <h4 class="toggle" aria-haspopup="true" aria-expanded="false"><span>+</span>{{ 'collections.sidebar.tags' | t }}</h4>
+            {% if tag_count > 0 %}
+              <ul class="blog_list toggle_list">
+                <li>
+                  <a {% unless current_tags %}class="active--default"{% endunless %} href="{% if collection.handle == "all" %}/collections/all{% else %}{{ collection.url }}{% endif %}">All {{ collection.title }}</a>
+                </li>
+                {% for tag in collection.all_tags %}
+                  {% unless tag contains 'meta-' %}
+                    <li>
+                      <a {% if current_tags contains tag %}class="active"{% endif %} href="/collections/{% if collection.handle != blank %}{{ collection.handle }}{% else %}all{% endif %}/{{ tag | handleize }}">{{ tag }}</a>
+                    </li>
+                  {% endunless %}
+                {% endfor %}
+              </ul>
+            {% else %}
+              <p>No tags available.</p>
+            {% endif %}
+
+        {% elsif block.type == 'filter_by_type' %}
+          <h4 class="toggle" aria-haspopup="true" aria-expanded="false"><span>+</span>{{ 'collections.sidebar.product_types' | t }}</h4>
+          <ul class="blog_list toggle_list">
+            {% for product_type in shop.types %}
+              <li {% if product_type == collection.title %}class="active"{% endif %}>{{ product_type | link_to_type }}</li>
+            {% endfor %}
+          </ul>
+
+        {% elsif block.type == 'filter_by_collection' %}
+          <h4 class="toggle" aria-haspopup="true" aria-expanded="false"><span>+</span>{{ 'collections.sidebar.collections' | t }}</h4>
+          <ul class="blog_list toggle_list">
+            {% for col in collections %}
+              {% unless col.handle == 'frontpage' %}
+                <li {% if col.handle == collection.handle %}class="active"{% endif %}><a href="{{ col.url }}" title="{{ col.title | escape }}">{{ col.title }}</a></li>
+              {% endunless %}
+            {% endfor %}
+          </ul>
+
+        {% elsif block.type == 'filter_by_vendor' %}
+          <h4 class="toggle" aria-haspopup="true" aria-expanded="false"><span>+</span>{{ 'collections.sidebar.vendors' | t }}</h4>
+          <ul class="blog_list toggle_list">
+            {% for product_vendor in shop.vendors %}
+              <li {% if product_vendor == collection.title %}class="active"{% endif %}>{{ product_vendor | link_to_vendor }}</li>
+            {% endfor %}
+          </ul>
+
+        {% elsif block.type == 'text' %}
+          <h4 class="toggle" aria-haspopup="true" aria-expanded="false"><span>+</span>{{ block.settings.title | escape }}</h4>
+          <ul class="blog_list toggle_list content_block">
+            <li>{{ block.settings.text }}</li>
+          </ul>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}

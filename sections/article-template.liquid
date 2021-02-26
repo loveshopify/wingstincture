@@ -1,0 +1,501 @@
+{% paginate article.comments by 100 %}
+  {% assign tag_count = blog.all_tags | size %}
+  {% assign tag_threshold = section.settings.tag_threshold | minus: 0 %}
+
+  <div class="container main">
+    <div class="sixteen columns clearfix collection_nav {% if article.image and section.settings.slideshow_article_enabled %}feature_banner{% endif %}">
+      <div class="{% if section.settings.blog_tags and tag_count > tag_threshold %}thirteen columns alpha{% endif %}">
+        <div class="collection_title {% if section.settings.blog_tags and tag_count < tag_threshold %}collection_title_tags{% endif %}"><a href="{{ blog.url }}" title="{{ blog.title | escape }}">{{ blog.title }}</a></div>
+
+        {% if section.settings.blog_tags %}
+          {% if tag_count < tag_threshold %}
+            <ul class="collection_menu">
+              <li>
+                <a href="{{ blog.url }}">{% if current_tags %}{{ 'blogs.general.view_all' | t }}{% else %}<span class="active">{{ 'blogs.general.view_all' | t }}</span>{% endif %}</a>
+              </li>
+              {% for tag in blog.all_tags %}
+                <li>
+                  {{ tag | highlight_active_tag | link_to_tag: tag }}
+                </li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        {% endif %}
+      </div>
+
+      {% if section.settings.blog_tags %}
+        <div class="three columns omega section_select tag_filter" {% if tag_count >= tag_threshold %}style="display:block"{% endif %}>
+          <select name="tag_filter" id="tag_filter" class="blog_filter" {% if tag_count < tag_threshold %}style="display:none"{% endif %}>
+            <option {% unless current_tags %}selected="selected"{% endunless %} value="{{ blog.url }}">{{ 'blogs.general.view_all' | t }}</option>
+            {% for tag in blog.all_tags %}
+              <option {% if current_tags contains tag %}selected="selected"{% endif %} value="/blogs/{{ blog.handle }}/tagged/{{ tag | handleize }}">{{ tag }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+  {% if article.image and section.settings.slideshow_article_enabled %}
+    <div class="slider banner-flexslider slideshow_article_darken--{{section.settings.slideshow_post_darken}}">
+      <ul class="slides">
+        <li>
+          <img  src="{{ article.image | img_url: '300x' }}"
+                alt="{% if article.image.alt != blank %}{{ article.image.alt }}{% else %}{{ article.title | escape }}{% endif %}"
+                class="lazyload lazyload--fade-in banner_image"
+                sizes="100vw"
+                srcset="  {{ article.image | img_url: '2048x' }} 2048w,
+                          {{ article.image | img_url: '1600x' }} 1600w,
+                          {{ article.image | img_url: '1200x' }} 1200w,
+                          {{ article.image | img_url: '1000x' }} 1000w,
+                          {{ article.image | img_url: '800x' }} 800w,
+                          {{ article.image | img_url: '600x' }} 600w,
+                          {{ article.image | img_url: '400x' }} 400w"
+                 />
+
+          <div class="flex-caption">
+            <div class="container">
+              <div class="ten offset-by-three columns center">
+                <h1 class="headline">{{ article.title }}</h1>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  {% endif %}
+
+  {% comment %}Check to see if sidebar should be enabled{% endcomment %}
+  {% if section.blocks.size > 0 %}
+    {% assign sidebar = true %}
+  {% else %}
+    {% assign sidebar = false %}
+  {% endif %}
+
+  <div class="container">
+    <div class="twelve columns {% if sidebar == false %}offset-by-two{% endif %}">
+      <div class="section clearfix">
+        {% if section.settings.blog_tags and sidebar %}
+          <div class="blog_meta tags">
+            {% for tag in article.tags %}
+              <span><a href="{{ shop.url}}/blogs/{{ blog.handle }}/tagged/{{ tag | handleize }}" title="{{ blog.title }} {{ 'blogs.general.tagged' | t }} {{ tag | escape }}">{{ tag }}</a></span>
+            {% endfor %}
+          </div>
+        {% endif %}
+
+          {% unless article.image and section.settings.slideshow_article_enabled %}
+            <h1 class="article_name">{{ article.title }}</h1>
+          {% endunless %}
+
+          <p class="blog_meta">
+            {% if section.settings.blog_author %}
+              <span>{{ 'blogs.article.by_author' | t: author: article.author }}</span>
+            {% endif %}
+
+            {% if section.settings.blog_date %}
+              <span>{{ article.published_at | date: format: "month_day_year" }}</span>
+            {% endif %}
+
+            {% if section.settings.blog_comment_count %}
+              {% if settings.disqus_enabled %}
+                <span>
+                  <a href="{{ article.url }}#disqus_thread" data-disqus-identifier="{{ article.id }}" class="disqus-comment-count">{{ 'blogs.counts.comments_with_count' | t: count: 0 }}</a>
+                </span>
+              {% elsif article.comments_enabled? and article.comments_count > 0 %}
+                <span>
+                  <a href="{{ article.url }}#comments">{{ 'blogs.counts.comments_with_count' | t: count: article.comments_count }}</a>
+                </span>
+              {% endif %}
+            {% endif %}
+          </p>
+
+          {% if article.image and section.settings.slideshow_article_enabled == false %}
+            <p>
+              <img  src="{{ article.image | img_url: '300x' }}"
+                  class="lazyload lazyload--fade-in"
+                  alt="{% if article.image.alt != blank %}{{ article.image.alt }}{% else %}{{ article.title | escape }}{% endif %}"
+                  style="max-width: {{- article.image.width -}}px"
+                  data-sizes="auto"
+                  data-src="{{ article.image | img_url: '2048x' }}"
+                  data-srcset="  {{ article.image | img_url: '2048x' }} 2048w,
+                            {{ article.image | img_url: '1600x' }} 1600w,
+                            {{ article.image | img_url: '1200x' }} 1200w,
+                            {{ article.image | img_url: '1000x' }} 1000w,
+                            {{ article.image | img_url: '800x' }} 800w,
+                            {{ article.image | img_url: '600x' }} 600w,
+                            {{ article.image | img_url: '400x' }} 400w"
+                  />
+            </p>
+          {% endif %}
+
+          {{ article.content }}
+
+          <span class="clear"></span>
+
+          {% if section.settings.display_social_buttons %}
+            <br class="clear" />
+            {% include "social-buttons" with "article" %}
+          {% endif %}
+          <br class="clear" />
+
+          {% if section.settings.blog_author %}
+            <hr />
+            <div class="gravatar two columns alpha center" data-email="{{ article.user.email }}">
+              <img src="//1.gravatar.com/avatar/{{ article.user.email | md5 }}?s=160&r=G" alt="{{ article.author }}" />
+            </div>
+            <div class="comment-body eight columns omega">
+              <h6>{{ article.author }}</h6>
+              <p class="meta">
+                <span class="label">{{ 'blogs.article.author' | t }}</span>
+              </p>
+              <p>
+                {{ article.user.bio }}
+              </p>
+            </div>
+          {% endif %}
+
+          <div class="clear" id="comments"></div>
+          <br class="clear" />
+
+          {% if settings.disqus_enabled %}
+            <div id="disqus_thread"></div>
+            <script>
+                var disqus_config = function () {
+                    this.page.url = "{{ canonical_url }}";
+                    this.page.identifier = "{{ article.id }}";
+                };
+                (function() {
+                    var d = document, s = d.createElement('script');
+                    s.src = '//{{ settings.disqus_shortname }}.disqus.com/embed.js';
+                    s.setAttribute('data-timestamp', +new Date());
+                    (d.head || d.body).appendChild(s);
+                })();
+            </script>
+            <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+          {% elsif blog.comments_enabled? %}
+
+            {% if article.comments_count > 0 %}
+              <h4>{{ 'blogs.comments.response_count' | t: count: article.comments.size }}</h4>
+
+              {% for comment in article.comments %}
+                <div id="comment-{{ comment.id }}" class="comment clearfix">
+                  <div class="gravatar two columns alpha center" data-email="{{ comment.email }}">
+                    <img src="//1.gravatar.com/avatar/{{ comment.email | md5 }}?s=160&r=G" alt="{{ comment.author }}" />
+                  </div>
+                  <div class="comment-body eight columns omega">
+                    <h6>{{ comment.author }}</h6>
+                    <p class="meta">
+                      <span class="label">{{ comment.created_at | date: format: "month_day_year" }}</span>
+                    </p>
+
+                    {{ comment.content }}
+                  </div>
+                </div>
+              {% endfor %}
+            {% endif %}
+
+            {% if comment and comment.created_at %}
+              {% if article.comments_count == 0 %}
+                <h4>{{ 'blogs.comments.response_count' | t: count: article.comments.size }}</h4>
+              {% endif %}
+              <div id="comment-{{ comment.id }}" class="comment clearfix">
+                <div class="gravatar two columns alpha center" data-email="{{ comment.email }}">
+                  <img src="//1.gravatar.com/avatar/{{ comment.email | md5 }}?s=160&r=G" alt="{{ comment.author }}" />
+                </div>
+                <div class="comment-body eight columns omega">
+                  <h6>{{ comment.author }}</h6>
+                  <p class="meta">
+                    <span class="label">{{ comment.created_at | date: format: "month_day_year" }}</span>
+                  </p>
+
+                  {{ comment.content }}
+                </div>
+              </div>
+            {% endif %}
+
+            {% include 'pagination' with sidebar %}
+
+            <div class="clear" id="new-comment"></div>
+            <h4 class="title">{{ 'blogs.comments.title' | t }}</h4>
+
+            {% if blog.moderated? %}
+              <p><em>{{ 'blogs.comments.moderated' | t }}</em></p>
+            {% endif %}
+
+            {% form article %}
+              {% if form.posted_successfully? %}
+                {% if blog.moderated? %}
+                  <p class="quote align_left">{{ 'blogs.comments.success_moderated' | t }}</p>
+                {% else %}
+                  <p class="quote align_left">{{ 'blogs.comments.success' | t }}</p>
+                {% endif %}
+              {% endif %}
+
+              {% if form.errors %}
+                <p class="quote align_left">{{ 'general.forms.post_error' | t }}</p>
+              {% endif %}
+
+              <div class="six columns alpha">
+                <label for="comment_author">{{ 'blogs.comments.name' | t }} <span class="red">*</span></label>
+                <input type="text" id="comment_author" name="comment[author]" value="{{ form.author }}" required="required" />
+              </div>
+
+              <div class="six columns omega">
+                <label for="comment_email">{{ 'blogs.comments.email' | t }} <span class="red">*</span></label>
+                <input type="text" id="comment_email" name="comment[email]" value="{{ form.email }}" required="required" />
+              </div>
+
+              <label for="comment_body">{{ 'blogs.comments.comment' | t }} <span class="red">*</span></label>
+              <textarea id="comment_body" name="comment[body]" rows="5" required="required">{{ form.body }}</textarea>
+
+              <input type="submit" value="{{ 'blogs.comments.post' | t }}" id="comment-submit" class="action_button add_to_cart" />
+            {% endform %}
+          {% endif %}
+      </div>
+
+      {% if section.settings.blog_additional_articles and blog.articles_count > 1 %}
+        <div class="section clearfix">
+          <hr />
+          <h3>{{ 'blogs.article.additional_articles' | t: title: blog.title }}</h3>
+
+          {% assign article_found = false %}
+          {% for a in blog.articles limit: 4 %}
+            {% assign skip_article = false %}
+            {% if article_found == false and forloop.last %}
+              {% assign skip_article = true %}
+            {% endif %}
+            {% if article.id == a.id %}
+              {% assign article_found = true %}
+              {% assign skip_article = true %}
+            {% endif %}
+            {% unless skip_article %}
+              <div class="four columns {% cycle 'alpha', ' ', 'omega' %} article">
+                {% if a.image %}
+                  <a href="{{ a.url }}" title="{{ a.title | escape }}">
+                    <img  src="{{ a.image | img_url: '300x' }}"
+                          class="lazyload lazyload--fade-in"
+                          alt="{% if a.image.alt != blank %}{{ a.image.alt }}{% else %}{{ a.title | escape }}{% endif %}"
+                          style="max-width: {{- a.image.width -}}px"
+                          data-sizes="auto"
+                          data-src="{{ a.image | img_url: '560x' }}"
+                          data-srcset="  {{ a.image | img_url: '2048x' }} 2048w,
+                                    {{ a.image | img_url: '1600x' }} 1600w,
+                                    {{ a.image | img_url: '1200x' }} 1200w,
+                                    {{ a.image | img_url: '1000x' }} 1000w,
+                                    {{ a.image | img_url: '800x' }} 800w,
+                                    {{ a.image | img_url: '600x' }} 600w,
+                                    {{ a.image | img_url: '400x' }} 400w"
+                          />
+                  </a>
+                {% endif %}
+
+                {% if section.settings.blog_tags %}
+                  <div class="blog_meta tags">
+                    {% for tag in a.tags %}
+                      <span><a href="{{ shop.url}}/blogs/{{ blog.handle }}/tagged/{{ tag | handleize }}" title="{{ blog.title | escape }} {{ 'blogs.general.tagged' | t }} {{ tag | escape }}">{{ tag }}</a></span>
+                    {% endfor %}
+                  </div>
+                {% endif %}
+
+                <h5 class="sub_title">
+                  <a href="{{ a.url }}" title="{{ a.title | escape }}">{{ a.title }}</a>
+                </h5>
+                <p class="blog_meta">
+                  {% if section.settings.blog_author %}
+                    <span>{{ 'blogs.article.by_author' | t: author: a.author }}</span>
+                  {% endif %}
+
+                  {% if section.settings.blog_date %}
+                    <span>{{ a.published_at | date: format: "month_day_year" }}</span>
+                  {% endif %}
+
+                  {% if settings.disqus_enabled %}
+                    <span>
+                      <a href="{{ a.url }}#disqus_thread" data-disqus-identifier="{{ a.id }}" class="disqus-comment-count">{{ 'blogs.counts.comments_with_count' | t: count: 0 }}</a>
+                    </span>
+                  {% elsif a.comments_enabled? and a.comments_count > 0 %}
+                    <span>
+                      <a href="{{ a.url }}#comments">{{ 'blogs.counts.comments_with_count' | t: count: a.comments_count }}</a>
+                    </span>
+                  {% endif %}
+                </p>
+
+                {% if a.excerpt != blank %}                
+                  {% assign postexcerpt = a.excerpt | size %}
+                    {% if postexcerpt > 100 %}
+                      {% assign excerptlength = 'lg' %}
+                    {% elsif postexcerpt <= 50 %}
+                      {% assign excerptlength = 'sm' %}
+                    {% endif %}
+                    <div class="excerpt excerpt-length--{{ excerptlength }} {{ postexcerpt }}">
+                      {{ a.excerpt }} 
+                      <span class="truncation-fade"></span>
+                    </div>
+                {% endif %}
+                {% if section.settings.read_more_link %}
+                  <p class="continue_reading">
+                    <a href="{{ a.url }}" title="{{ a.title | escape }}" {% if settings.read_more_style == 'button' %}class="action_button"{% endif %}>{{ 'blogs.general.continue_reading_html' | t }}</a>
+                  </p>
+                {% endif %}
+              </div>
+            {% endunless %}
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+
+    {% include "blog-sidebar", blog_handle: blog.handle %}
+
+  </div>
+{% endpaginate %}
+
+{% schema %}
+
+{
+  "name": "Blog post",
+  "class": "post-section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "slideshow_article_enabled",
+      "label": "Show blog post banner image",
+      "info": "The post's featured image will be used as a full-width banner",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "slideshow_post_darken",
+      "label": "Darken blog post banner image",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "blog_tags",
+      "label": "Show blog post tags"
+    },
+    {
+      "type": "checkbox",
+      "id": "blog_author",
+      "label": "Show author"
+    },
+    {
+      "type": "checkbox",
+      "id": "blog_date",
+      "label": "Show date",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "display_social_buttons",
+      "label": "Show social media share icons",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "blog_comment_count",
+      "label": "Show comment count",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Additional posts"
+    },
+    {
+      "type": "checkbox",
+      "id": "blog_additional_articles",
+      "label": "Show additional posts",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "read_more_link",
+      "label": "Show continue reading link",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Sidebar"
+    },
+    {
+      "type": "paragraph",
+      "content": "Create a sidebar by adding content blocks."
+    },
+    {
+      "type": "checkbox",
+      "id": "toggle",
+      "label": "Toggle sidebar content",
+      "default": false
+    }
+  ],
+  "blocks": [
+   {
+      "type": "post_tags",
+      "name": "Blog post tags",
+      "limit": 1
+   },
+   {
+      "type": "menu",
+      "name": "Menu",
+      "settings": [
+        {
+          "type": "link_list",
+          "id": "custom_menu_linklist",
+          "label": "Menu"
+        }
+      ]
+   },
+   {
+      "type": "newsletter",
+      "name": "Newsletter sign up form",
+      "limit": 1,
+      "settings": [
+        {
+         "type": "richtext",
+         "id": "newsletter_richtext",
+         "label": "Text"
+        }
+      ]
+    },
+    {
+      "type": "page",
+      "name": "Page",
+      "settings": [
+        {
+          "type": "page",
+          "id": "content_page",
+          "label": "Page"
+        }
+      ]
+    },
+    {
+      "type": "recent_posts",
+      "name": "Recent blog posts",
+      "limit": 1
+    },
+    {
+      "type": "search",
+      "name": "Search form",
+      "limit": 1
+    },
+    {
+      "type": "text",
+      "name": "Text",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading",
+          "default": "Heading"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Text area can be used for details about blog authors or general information.</p>"
+        }
+      ]
+    }
+  ]
+}
+
+
+{% endschema %}
